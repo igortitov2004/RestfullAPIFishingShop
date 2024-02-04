@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class TypeOfRodDTO {
 
-
     private Long id;
 
     private String type;

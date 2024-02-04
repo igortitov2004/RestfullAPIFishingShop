@@ -9,7 +9,6 @@ import lombok.Data;
 public class RodDTO {
 
 
-
     private Long id;
 
     private String name;
