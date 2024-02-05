@@ -11,7 +11,7 @@ import java.util.List;
 public interface RodsCartRepository extends JpaRepository<RodsCart,Long> {
     List<RodsCart> findByUserId(Long id);
 
+    boolean existsRodsCartByUserId(Long id);
 
-
-
+    boolean existsRodsCartById(Long id);
 }

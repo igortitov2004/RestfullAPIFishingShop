@@ -23,4 +23,7 @@ public class Manufacturer {
 
     @OneToMany(mappedBy = "manufacturer")
     private List<Rod> rods;
+
+    @OneToMany(mappedBy = "manufacturer")
+    private List<Reel> reels;
 }

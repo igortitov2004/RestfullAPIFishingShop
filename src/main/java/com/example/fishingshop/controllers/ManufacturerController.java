@@ -1,10 +1,12 @@
 package com.example.fishingshop.controllers;
 
 import com.example.fishingshop.DTOs.ManufacturerDTO;
+import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
+import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
 import com.example.fishingshop.services.ManufacturerService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +36,7 @@ public class ManufacturerController {
         manufacturerService.delete(id);
         return ResponseEntity.ok("Удален производитель c id " + id);
     }
-    @PatchMapping("/")
+    @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody ManufacturerDTO manufacturerDTO){
         manufacturerService.edit(manufacturerDTO);
         return ResponseEntity.ok("Обновлены данные производителя с id " + manufacturerDTO.getId());

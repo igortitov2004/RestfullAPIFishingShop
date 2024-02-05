@@ -34,5 +34,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<RodsCart> rodsCarts;
 
+    @OneToMany(mappedBy = "user")
+    private List<RodsOrder> rodsOrders;
+
 
 }

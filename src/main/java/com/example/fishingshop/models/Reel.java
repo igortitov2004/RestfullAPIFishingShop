@@ -1,45 +1,37 @@
 package com.example.fishingshop.models;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Table(name = "Rods")
+@Table(name = "reels")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Rod {
+public class Reel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "name")
     private String name;
-    @Column(name = "length")
-    private Integer length;
-    @Column(name = "weight")
-    private Integer weight;
-    @Column(name = "testLoad")
-    private Integer testLoad;
-
     @Column(name = "price")
     private Double price;
     @ManyToOne
     @JoinColumn(name="type_of_rod")
-    private TypeOfRod type;
+    private TypeOfReel type;
     @ManyToOne
     @JoinColumn(name="manufacturer")
     private Manufacturer manufacturer;
 
-    @OneToMany(mappedBy = "rod")
-    private List<RodsCart> rodsCarts;
-
-    @OneToMany(mappedBy = "rod")
-    private List<RodsOrder> rodsOrders;
+//    @OneToMany(mappedBy = "rod")
+//    private List<RodsCart> rodsCarts;
+//
+//    @OneToMany(mappedBy = "rod")
+//    private List<RodsOrder> rodsOrders;
 }

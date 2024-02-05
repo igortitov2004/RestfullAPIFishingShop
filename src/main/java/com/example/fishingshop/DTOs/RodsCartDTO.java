@@ -1,12 +1,13 @@
 package com.example.fishingshop.DTOs;
 
-import com.example.fishingshop.models.Rod;
-import com.example.fishingshop.models.User;
-import jakarta.persistence.*;
+import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.RodDTO;
 import lombok.Data;
 
 @Data
 public class RodsCartDTO {
+
+    private Long id;
     private RodDTO rod;
     private Integer amount;
     private UserDTO user;

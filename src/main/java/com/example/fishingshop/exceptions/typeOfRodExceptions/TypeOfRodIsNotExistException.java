@@ -1,6 +1,8 @@
 package com.example.fishingshop.exceptions.typeOfRodExceptions;
 
-public class TypeOfRodIsNotExistException extends RuntimeException{
+import com.example.fishingshop.exceptions.CustomException;
+
+public class TypeOfRodIsNotExistException extends CustomException {
     public TypeOfRodIsNotExistException(String message){
         super(message);
     }

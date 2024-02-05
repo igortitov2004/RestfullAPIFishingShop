@@ -2,7 +2,7 @@ package com.example.fishingshop.services.servicesImpl;
 
 import com.example.fishingshop.DTOs.ManufacturerDTO;
 import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
-import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExist;
+import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Manufacturer;
 import com.example.fishingshop.repositories.ManufacturerRepository;
@@ -42,14 +42,14 @@ public class ManufacturerServiceImpl implements
     @Override
     public void delete(Long id){
         if(!manufacturerRepository.existsManufacturersById(id)){
-            throw new ManufacturerIsNotExist("Manufacturer with this id is not exist");
+            throw new ManufacturerIsNotExistException("Manufacturer with this id is not exist");
         }
         manufacturerRepository.deleteById(id);
     }
     @Override
     public void edit(ManufacturerDTO dto){
         if(!manufacturerRepository.existsManufacturersById(dto.getId())){
-            throw new ManufacturerIsNotExist("Manufacturer with this id is not exist");
+            throw new ManufacturerIsNotExistException("Manufacturer with this id is not exist");
         }
         Optional<Manufacturer> manufacturerOptional =
                 Optional.ofNullable(manufacturerRepository.findManufacturerByName(dto.getName()));
@@ -59,15 +59,13 @@ public class ManufacturerServiceImpl implements
         }
         manufacturerRepository.save(mapToEntity(dto));
     }
-
     @Override
     public ManufacturerDTO getById(Long id) {
         if(!manufacturerRepository.existsManufacturersById(id)){
-            throw new ManufacturerIsNotExist("Manufacturer with this id is not exist");
+            throw new ManufacturerIsNotExistException("Manufacturer with this id is not exist");
         }
         return manufacturerRepository.findById(id).map(this::mapToDTO).get();
     }
-
     @Override
     public ManufacturerDTO mapToDTO(Manufacturer entity) {
         return modelMapper.map(entity,ManufacturerDTO.class);

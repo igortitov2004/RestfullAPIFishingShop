@@ -2,8 +2,14 @@ package com.example.fishingshop.controllers;
 
 import com.example.fishingshop.DTOs.ManufacturerDTO;
 import com.example.fishingshop.DTOs.TypeOfRodDTO;
+import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
+import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
+import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodAlreadyExistException;
+import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodIsNotExistException;
 import com.example.fishingshop.services.TypeOfRodService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.ErrorMessage;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,9 +40,9 @@ public class TypeOfRodController {
         typeOfRodService.delete(id);
         return ResponseEntity.ok("Удален тип удилища c id " + id);
     }
-    @PatchMapping("/")
+    @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody TypeOfRodDTO typeOfRodDTO){
         typeOfRodService.edit(typeOfRodDTO);
-        return ResponseEntity.ok("Обновлены данные удилища с id " + typeOfRodDTO.getId());
+        return ResponseEntity.ok("Обновлены данные типа удилища с id " + typeOfRodDTO.getId());
     }
 }

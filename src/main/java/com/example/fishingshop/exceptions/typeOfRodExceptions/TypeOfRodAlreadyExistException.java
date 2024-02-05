@@ -1,6 +1,8 @@
 package com.example.fishingshop.exceptions.typeOfRodExceptions;
 
-public class TypeOfRodAlreadyExistException extends RuntimeException{
+import com.example.fishingshop.exceptions.CustomException;
+
+public class TypeOfRodAlreadyExistException extends CustomException {
     public TypeOfRodAlreadyExistException(String message){
         super(message);
     }
