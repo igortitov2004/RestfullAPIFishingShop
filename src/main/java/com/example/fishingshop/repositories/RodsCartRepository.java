@@ -14,4 +14,6 @@ public interface RodsCartRepository extends JpaRepository<RodsCart,Long> {
     boolean existsRodsCartByUserId(Long id);
 
     boolean existsRodsCartById(Long id);
+
+    void deleteRodsCartByUserId(Long id);
 }

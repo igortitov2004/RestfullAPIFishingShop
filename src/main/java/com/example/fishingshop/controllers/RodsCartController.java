@@ -1,12 +1,9 @@
 package com.example.fishingshop.controllers;
 
-import com.example.fishingshop.DTOs.RodsCartDTO;
-import com.example.fishingshop.exceptions.rodExceptions.RodIsNotExistException;
-import com.example.fishingshop.exceptions.rodsCartExceptions.RodsCartIsNotExistsException;
+import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
+import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
 import com.example.fishingshop.services.RodsCartService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.ErrorMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,20 +19,21 @@ public class RodsCartController {
        return rodsCartService.listByUserId(id);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RodsCartDTO> rodsCartInfo(@PathVariable Long id){
-        RodsCartDTO rodsCartDTO = rodsCartService.getById(id);
-        return ResponseEntity.ok(rodsCartDTO);
-    }
+
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody RodsCartDTO rodsCartDTO){
-        rodsCartService.add(rodsCartDTO);
+    public ResponseEntity<String> create(@RequestBody RodsCartCreationRequest rodsCartCreationRequest){
+        rodsCartService.add(rodsCartCreationRequest);
         return ResponseEntity.ok("Товар добавлен в корзину");
+    }
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<String> deleteByUserId(@PathVariable Long id){
+        rodsCartService.deleteByUserId(id);
+        return ResponseEntity.ok("Удилища c id пользователя" + id+" удалены из корзины");
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
-        rodsCartService.delete(id);
-        return ResponseEntity.ok("Удалена корзина удилищ c id " + id);
+        rodsCartService.deleteById(id);
+        return ResponseEntity.ok("Удилище c id " + id+" удалено из корзины");
     }
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody RodsCartDTO rodsCartDTO){

@@ -1,11 +1,14 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.RodsCartDTO;
+import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
+import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
 import com.example.fishingshop.exceptions.rodsCartExceptions.RodsCartIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.RodsCart;
 import com.example.fishingshop.repositories.RodsCartRepository;
+import com.example.fishingshop.services.RodService;
 import com.example.fishingshop.services.RodsCartService;
+import com.example.fishingshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,9 @@ import java.util.List;
 public class RodsCartServiceImpl implements RodsCartService, Map<RodsCartDTO,RodsCart> {
     private final RodsCartRepository rodsCartRepository;
     private final ModelMapper modelMapper;
+
+    private final UserService userService;
+    private final RodService rodService;
     @Override
     public List<RodsCartDTO> listByUserId(Long id){
         if(!rodsCartRepository.existsRodsCartByUserId(id)){
@@ -26,7 +32,7 @@ public class RodsCartServiceImpl implements RodsCartService, Map<RodsCartDTO,Rod
     }
 
     @Override
-    public void delete(Long id){
+    public void deleteById(Long id){
         if(!rodsCartRepository.existsRodsCartById(id)){
             throw new RodsCartIsNotExistsException("Rods cart with this id is not exists");
         }
@@ -34,8 +40,20 @@ public class RodsCartServiceImpl implements RodsCartService, Map<RodsCartDTO,Rod
     }
 
     @Override
-    public void add(RodsCartDTO dto) {
-        rodsCartRepository.save(mapToEntity(dto));
+    public void deleteByUserId(Long id) {
+        if(!rodsCartRepository.existsRodsCartByUserId(id)){
+            throw new RodsCartIsNotExistsException("Rods cart with this user id is not exists");
+        }
+        rodsCartRepository.deleteRodsCartByUserId(id);
+    }
+
+    @Override
+    public void add(RodsCartCreationRequest request) {
+        RodsCartDTO rodsCartDTO = new RodsCartDTO();
+        rodsCartDTO.setRod(rodService.getById(request.getRodId()));
+        rodsCartDTO.setUser(userService.getById(request.getUserId()));
+        rodsCartDTO.setAmount(request.getAmount());
+        rodsCartRepository.save(mapToEntity(rodsCartDTO));
     }
 
     @Override
@@ -46,13 +64,7 @@ public class RodsCartServiceImpl implements RodsCartService, Map<RodsCartDTO,Rod
         rodsCartRepository.save(mapToEntity(dto));
     }
 
-    @Override
-    public RodsCartDTO getById(Long id){
-        if(!rodsCartRepository.existsRodsCartById(id)){
-            throw new RodsCartIsNotExistsException("Rods cart with this id is not exists");
-        }
-        return rodsCartRepository.findById(id).map(this::mapToDTO).get();
-    }
+
 
     @Override
     public RodsCartDTO mapToDTO(RodsCart entity){

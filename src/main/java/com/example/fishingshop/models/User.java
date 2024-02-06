@@ -1,6 +1,7 @@
 package com.example.fishingshop.models;
 
 
+import com.example.fishingshop.DTOs.orders.OrderDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,9 +34,18 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<RodsCart> rodsCarts;
+    @OneToMany(mappedBy = "user")
+    private List<ReelsCart> reelsCarts;
+
+//    @OneToMany(mappedBy = "user")
+//    private List<RodsOrder> rodsOrders;
+
 
     @OneToMany(mappedBy = "user")
-    private List<RodsOrder> rodsOrders;
+    private List<Order> orders;
+
+//    @OneToMany(mappedBy = "user")
+//    private List<ReelsOrder> reelsOrders;
 
 
 }

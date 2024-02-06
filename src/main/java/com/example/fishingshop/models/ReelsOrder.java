@@ -7,22 +7,23 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "rods_orders")
+@Table(name = "reels_orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RodsOrder {
+@ToString
+public class ReelsOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name="rod")
-    private Rod rod;
+    @JoinColumn(name="reel")
+    private Reel reel;
     @Column(name = "amount")
     private Integer amount;
     @ManyToOne

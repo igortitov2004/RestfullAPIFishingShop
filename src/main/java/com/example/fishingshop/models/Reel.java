@@ -29,6 +29,13 @@ public class Reel {
     @JoinColumn(name="manufacturer")
     private Manufacturer manufacturer;
 
+
+    @OneToMany(mappedBy = "reel")
+    private List<ReelsCart> reelsCarts;
+
+    @OneToMany(mappedBy = "reel")
+    private List<ReelsOrder> reelsOrders;
+
 //    @OneToMany(mappedBy = "rod")
 //    private List<RodsCart> rodsCarts;
 //

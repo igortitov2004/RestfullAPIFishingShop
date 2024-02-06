@@ -1,11 +1,17 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.RodsOrderDTO;
+import com.example.fishingshop.DTOs.orders.ReelsForOrderRequestDTO;
+import com.example.fishingshop.DTOs.orders.ReelsOrderDTO;
+import com.example.fishingshop.DTOs.orders.RodsForOrderRequestDTO;
+import com.example.fishingshop.DTOs.orders.RodsOrderDTO;
 import com.example.fishingshop.exceptions.rodsOrderExceptions.RodsOrderIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
+import com.example.fishingshop.models.Order;
 import com.example.fishingshop.models.RodsOrder;
 import com.example.fishingshop.repositories.RodsOrderRepository;
+import com.example.fishingshop.services.RodService;
 import com.example.fishingshop.services.RodsOrderService;
+import com.example.fishingshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,35 +25,39 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
 
     private final RodsOrderRepository rodsOrderRepository;
 
+    private final RodService rodService;
+    private final UserService userService;
+
     @Override
     public List<RodsOrderDTO> listByUserId(Long id) {
-        if(!rodsOrderRepository.existsRodsOrderByUserId(id)){
-            throw new RodsOrderIsNotExistsException("Rods order with this user id is not exists");
-        }
-        return rodsOrderRepository.findByUserId(id)
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+      return null;
     }
 
     @Override
     public void deleteByUserId(Long id) {
-        if(!rodsOrderRepository.existsRodsOrderByUserId(id)){
-            throw new RodsOrderIsNotExistsException("Rods order with this user id is not exists");
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if(!rodsOrderRepository.existsRodsOrderById(id)){
+            throw new RodsOrderIsNotExistsException("Rods order with this id is not exists");
         }
-        rodsOrderRepository.deleteRodsOrderByUserId(id);
+        rodsOrderRepository.deleteById(id);
     }
 
-    @Override
-    public void add(RodsOrderDTO dto){
-        //Подумать
-        rodsOrderRepository.save(mapToEntity(dto));
+    public void add(List<RodsForOrderRequestDTO> rodsForOrderRequestDTOList, Order order) {
+        for (RodsForOrderRequestDTO dto:rodsForOrderRequestDTOList) {
+            RodsOrderDTO rodsOrderDTO = new RodsOrderDTO();
+            rodsOrderDTO.setRod(rodService.getById(dto.getIdRods()));
+            rodsOrderDTO.setAmount(dto.getAmount());
+            RodsOrder rodsOrder = mapToEntity(rodsOrderDTO);
+            rodsOrder.setOrder(order);
+            rodsOrderRepository.save(rodsOrder);
+        }
     }
 
-    @Override
-    public RodsOrderDTO getById(Long id) {
-        return null;
-    }
+
     @Override
     public RodsOrderDTO mapToDTO(RodsOrder entity) {
         return modelMapper.map(entity,RodsOrderDTO.class);

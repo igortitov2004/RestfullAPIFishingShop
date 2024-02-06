@@ -1,31 +1,32 @@
 package com.example.fishingshop.models;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Entity
-@Table(name = "rods_orders")
+@Table(name = "reels_carts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RodsOrder {
+public class ReelsCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
+
     @ManyToOne
-    @JoinColumn(name="rod")
-    private Rod rod;
+    @JoinColumn(name="user")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name="reel")
+    private Reel reel;
+
     @Column(name = "amount")
     private Integer amount;
-    @ManyToOne
-    @JoinColumn(name="order_obj")
-    private Order order;
+
+
 }
