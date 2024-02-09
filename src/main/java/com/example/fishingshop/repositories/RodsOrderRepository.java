@@ -9,5 +9,11 @@ import java.util.List;
 
 @Repository
 public interface RodsOrderRepository extends JpaRepository<RodsOrder,Long> {
+
+    List<RodsOrder> findRodsOrderByOrderId(Long id);
     boolean existsRodsOrderById(Long id);
+
+    boolean existsRodsOrderByOrderId(Long id);
+
+
 }

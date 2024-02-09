@@ -8,19 +8,9 @@ import lombok.Data;
 
 @Data
 public class UserDTO {
-
-
     private Long id;
-
-
     private String email;
-
-
     private String surname;
-
-
     private String firstName;
-
-
     private String patronymic;
 }

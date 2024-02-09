@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReelsCartRepository extends JpaRepository<ReelsCart,Long> {
@@ -14,5 +15,11 @@ public interface ReelsCartRepository extends JpaRepository<ReelsCart,Long> {
     boolean existsReelsCartByUserId(Long id);
 
     boolean existsReelsCartById(Long id);
+
+//    boolean existsReelsCartByReelId(Long id);
     void deleteReelsCartByUserId(Long id);
+
+    Optional<ReelsCart> findReelsCartByUserIdAndReelId(Long idUser,Long idReel);
+
+    void deleteAllByUserId(Long id);
 }

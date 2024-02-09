@@ -1,6 +1,7 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.TypeOfReelDTO;
+import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelCreationRequest;
+import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.exceptions.typeOfReelExceptions.TypeOfReelAlreadyExistsException;
 import com.example.fishingshop.exceptions.typeOfReelExceptions.TypeOfReelIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
@@ -35,11 +36,13 @@ public class TypeOfReelServiceImpl implements Map<TypeOfReelDTO,TypeOfReel>, Typ
     }
 
     @Override
-    public void add(TypeOfReelDTO dto) {
-        if(!typeOfReelRepository.existsTypeOfReelByType(dto.getType())){
+    public void add(TypeOfReelCreationRequest request) {
+        if(typeOfReelRepository.existsTypeOfReelByType(request.getType())){
              throw new TypeOfReelAlreadyExistsException("Such a type of reel is already exists");
         }
-        typeOfReelRepository.save(mapToEntity(dto));
+        TypeOfReelDTO typeOfReelDTO = new TypeOfReelDTO();
+        typeOfReelDTO.setType(request.getType());
+        typeOfReelRepository.save(mapToEntity(typeOfReelDTO));
     }
 
     @Override

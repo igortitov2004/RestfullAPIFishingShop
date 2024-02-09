@@ -1,4 +1,4 @@
-package com.example.fishingshop.DTOs;
+package com.example.fishingshop.DTOs.typeOfReel;
 
 import com.example.fishingshop.models.Reel;
 import jakarta.persistence.*;

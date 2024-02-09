@@ -1,5 +1,6 @@
 package com.example.fishingshop.controllers;
 
+import com.example.fishingshop.DTOs.rodsCart.RodCartIncreaseAmountRequest;
 import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
 import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
 import com.example.fishingshop.services.RodsCartService;
@@ -36,8 +37,8 @@ public class RodsCartController {
         return ResponseEntity.ok("Удилище c id " + id+" удалено из корзины");
     }
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody RodsCartDTO rodsCartDTO){
-        rodsCartService.edit(rodsCartDTO);
-        return ResponseEntity.ok("Обновлены данные удилища с id " + rodsCartDTO.getId());
+    public ResponseEntity<String> update(@RequestBody RodCartIncreaseAmountRequest request){
+        rodsCartService.increaseAmount(request);
+        return ResponseEntity.ok("Обновлены данные удилища с id " + request.getId());
     }
 }

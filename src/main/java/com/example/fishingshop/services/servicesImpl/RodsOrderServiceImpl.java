@@ -1,21 +1,23 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.orders.ReelsForOrderRequestDTO;
-import com.example.fishingshop.DTOs.orders.ReelsOrderDTO;
-import com.example.fishingshop.DTOs.orders.RodsForOrderRequestDTO;
+
+import com.example.fishingshop.DTOs.orders.RodsForOrderResponse;
 import com.example.fishingshop.DTOs.orders.RodsOrderDTO;
+import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
 import com.example.fishingshop.exceptions.rodsOrderExceptions.RodsOrderIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Order;
 import com.example.fishingshop.models.RodsOrder;
 import com.example.fishingshop.repositories.RodsOrderRepository;
 import com.example.fishingshop.services.RodService;
+import com.example.fishingshop.services.RodsCartService;
 import com.example.fishingshop.services.RodsOrderService;
 import com.example.fishingshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,15 +30,23 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
     private final RodService rodService;
     private final UserService userService;
 
-    @Override
-    public List<RodsOrderDTO> listByUserId(Long id) {
-      return null;
-    }
+    private final RodsCartService rodsCartService;
 
     @Override
-    public void deleteByUserId(Long id) {
-
+    public List<RodsForOrderResponse> listByOrderId(Long id) {
+        List<RodsOrderDTO> rodsOrderDTOlist =
+                rodsOrderRepository.findRodsOrderByOrderId(id)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+        List<RodsForOrderResponse> responseList = new ArrayList<>();
+        for (RodsOrderDTO dto:rodsOrderDTOlist){
+            responseList.add(modelMapper.map(dto,RodsForOrderResponse.class));
+        }
+        return responseList;
     }
+
+
 
     @Override
     public void deleteById(Long id) {
@@ -46,15 +56,16 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
         rodsOrderRepository.deleteById(id);
     }
 
-    public void add(List<RodsForOrderRequestDTO> rodsForOrderRequestDTOList, Order order) {
-        for (RodsForOrderRequestDTO dto:rodsForOrderRequestDTOList) {
+    public void add(Order order) {
+        for(RodsCartDTO dto:rodsCartService.listByUserId(1L)) {
             RodsOrderDTO rodsOrderDTO = new RodsOrderDTO();
-            rodsOrderDTO.setRod(rodService.getById(dto.getIdRods()));
+            rodsOrderDTO.setRod(dto.getRod());
             rodsOrderDTO.setAmount(dto.getAmount());
             RodsOrder rodsOrder = mapToEntity(rodsOrderDTO);
             rodsOrder.setOrder(order);
             rodsOrderRepository.save(rodsOrder);
         }
+        rodsCartService.deleteByUserId(order.getUser().getId());
     }
 
 

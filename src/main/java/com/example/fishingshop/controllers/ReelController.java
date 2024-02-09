@@ -1,7 +1,8 @@
 package com.example.fishingshop.controllers;
 
-import com.example.fishingshop.DTOs.ReelDTO;
-import com.example.fishingshop.DTOs.RodDTO;
+import com.example.fishingshop.DTOs.reel.ReelCreationRequest;
+import com.example.fishingshop.DTOs.reel.ReelDTO;
+import com.example.fishingshop.DTOs.reel.ReelEditRequest;
 import com.example.fishingshop.services.ReelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,14 @@ public class ReelController {
         return ResponseEntity.ok(reelService.list(name));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ReelDTO> rodInfo(@PathVariable Long id){
+    public ResponseEntity<ReelDTO> reelInfo(@PathVariable Long id){
         ReelDTO reelDTO = reelService.getById(id);
         return ResponseEntity.ok(reelDTO);
     }
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody ReelDTO reelDTO){
-        reelService.add(reelDTO);
-        return ResponseEntity.ok("Создана катушка" + reelDTO.getName());
+    public ResponseEntity<String> create(@RequestBody ReelCreationRequest request){
+        reelService.add(request);
+        return ResponseEntity.ok("Создана катушка" + request.getName());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
@@ -36,9 +37,9 @@ public class ReelController {
         return ResponseEntity.ok("Удалена катушка c id " + id);
     }
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody ReelDTO reelDTO){
-        reelService.edit(reelDTO);
-        return ResponseEntity.ok("Обновлены данные катушки с id " + reelDTO.getId());
+    public ResponseEntity<String> update(@RequestBody ReelEditRequest request){
+        reelService.edit(request);
+        return ResponseEntity.ok("Обновлены данные катушки с id " + request.getId());
     }
 
 }

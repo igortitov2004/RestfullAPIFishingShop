@@ -1,14 +1,16 @@
 package com.example.fishingshop.services;
 
 
-import com.example.fishingshop.DTOs.RodDTO;
+import com.example.fishingshop.DTOs.rod.RodCreationRequest;
+import com.example.fishingshop.DTOs.rod.RodDTO;
+import com.example.fishingshop.DTOs.rod.RodEditRequest;
 
 import java.util.List;
 
 public interface RodService {
     List<RodDTO> list(String name);
-    void add(RodDTO dto);
+    void add(RodCreationRequest dto);
     void delete(Long id);
-    void edit(RodDTO dto);
+    void edit(RodEditRequest request);
     RodDTO getById(Long id);
 }

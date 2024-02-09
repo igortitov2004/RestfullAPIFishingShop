@@ -1,15 +1,9 @@
 package com.example.fishingshop.controllers;
 
-import com.example.fishingshop.DTOs.ManufacturerDTO;
-import com.example.fishingshop.DTOs.TypeOfRodDTO;
-import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
-import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
-import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodAlreadyExistException;
-import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodIsNotExistException;
+import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodCreationRequest;
+import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
 import com.example.fishingshop.services.TypeOfRodService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.ErrorMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +25,9 @@ public class TypeOfRodController {
         return ResponseEntity.ok(typeOfRodDTO);
     }
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody TypeOfRodDTO typeOfRodDTO){
-        typeOfRodService.add(typeOfRodDTO);
-        return ResponseEntity.ok("Создан тип удилища" + typeOfRodDTO.getType());
+    public ResponseEntity<String> create(@RequestBody TypeOfRodCreationRequest request){
+        typeOfRodService.add(request);
+        return ResponseEntity.ok("Создан тип удилища " + request.getType());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){

@@ -1,12 +1,10 @@
 package com.example.fishingshop.controllers;
 
-import com.example.fishingshop.DTOs.RodDTO;
-import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
-import com.example.fishingshop.exceptions.rodExceptions.RodIsNotExistException;
+import com.example.fishingshop.DTOs.rod.RodCreationRequest;
+import com.example.fishingshop.DTOs.rod.RodDTO;
+import com.example.fishingshop.DTOs.rod.RodEditRequest;
 import com.example.fishingshop.services.RodService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.ErrorMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +26,9 @@ public class RodController{
         return ResponseEntity.ok(rodDTO);
     }
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody RodDTO rodDTO){
-        rodService.add(rodDTO);
-        return ResponseEntity.ok("Создано удилище" + rodDTO.getName());
+    public ResponseEntity<String> create(@RequestBody RodCreationRequest request){
+        rodService.add(request);
+        return ResponseEntity.ok("Создано удилище" + request.getName());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
@@ -38,8 +36,8 @@ public class RodController{
         return ResponseEntity.ok("Удалено удилище c id " + id);
     }
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody RodDTO rodDTO){
-        rodService.edit(rodDTO);
-        return ResponseEntity.ok("Обновлены данные удилища с id " + rodDTO.getId());
+    public ResponseEntity<String> update(@RequestBody RodEditRequest request){
+        rodService.edit(request);
+        return ResponseEntity.ok("Обновлены данные удилища с id " + request.getId());
     }
 }

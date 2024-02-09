@@ -1,27 +1,17 @@
-package com.example.fishingshop.DTOs;
+package com.example.fishingshop.DTOs.rod;
 
-import com.example.fishingshop.DTOs.ManufacturerDTO;
-import com.example.fishingshop.DTOs.TypeOfRodDTO;
-import com.example.fishingshop.models.Manufacturer;
-import com.example.fishingshop.models.TypeOfRod;
-import jakarta.persistence.*;
+import com.example.fishingshop.DTOs.manufacturer.ManufacturerDTO;
+import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
 import lombok.Data;
 
 @Data
 public class RodDTO {
     private Long id;
-
     private String name;
-
     private Integer length;
-
     private Integer weight;
-
     private Integer testLoad;
-
     private Double price;
-
     private TypeOfRodDTO type;
-
     private ManufacturerDTO manufacturer;
 }

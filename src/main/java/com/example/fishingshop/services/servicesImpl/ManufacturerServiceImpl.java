@@ -1,6 +1,7 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.ManufacturerDTO;
+import com.example.fishingshop.DTOs.manufacturer.ManufacturerCreationRequest;
+import com.example.fishingshop.DTOs.manufacturer.ManufacturerDTO;
 import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
 import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
 import com.example.fishingshop.interfaces.Map;
@@ -33,11 +34,13 @@ public class ManufacturerServiceImpl implements
         return manufacturerRepository.findAll().stream().map(this::mapToDTO).toList();
     }
     @Override
-    public void add(ManufacturerDTO dto) {
-        if(manufacturerRepository.existsManufacturersByName(dto.getName())){
+    public void add(ManufacturerCreationRequest request) {
+        if(manufacturerRepository.existsManufacturersByName(request.getName())){
             throw new ManufacturerAlreadyExistException("Such a manufacturer already exists");
         }
-        manufacturerRepository.save(mapToEntity(dto));
+        ManufacturerDTO manufacturerDTO = new ManufacturerDTO();
+        manufacturerDTO.setName(request.getName());
+        manufacturerRepository.save(mapToEntity(manufacturerDTO));
     }
     @Override
     public void delete(Long id){

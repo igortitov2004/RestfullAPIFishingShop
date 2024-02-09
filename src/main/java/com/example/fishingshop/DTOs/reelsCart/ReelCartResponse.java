@@ -1,14 +1,12 @@
 package com.example.fishingshop.DTOs.reelsCart;
 
-import com.example.fishingshop.DTOs.reel.ReelDTO;
 import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.reel.ReelDTO;
 import lombok.Data;
 
 @Data
-
-public class ReelsCartDTO {
+public class ReelCartResponse {
     private Long id;
-    private UserDTO user;
     private ReelDTO reel;
     private Integer amount;
 }

@@ -1,13 +1,16 @@
 package com.example.fishingshop.services.servicesImpl;
 
 
-import com.example.fishingshop.DTOs.ReelDTO;
-import com.example.fishingshop.DTOs.RodDTO;
+import com.example.fishingshop.DTOs.reel.ReelCreationRequest;
+import com.example.fishingshop.DTOs.reel.ReelDTO;
+import com.example.fishingshop.DTOs.reel.ReelEditRequest;
 import com.example.fishingshop.exceptions.reelExceptions.ReelIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Reel;
 import com.example.fishingshop.repositories.ReelRepository;
+import com.example.fishingshop.services.ManufacturerService;
 import com.example.fishingshop.services.ReelService;
+import com.example.fishingshop.services.TypeOfReelService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,10 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
     private final ModelMapper modelMapper;
 
     private final ReelRepository reelRepository;
+
+    private final ManufacturerService manufacturerService;
+    private final TypeOfReelService typeOfReelService;
+
 
     @Override
     public List<ReelDTO> list(String name) {
@@ -37,9 +44,13 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
     }
 
     @Override
-    public void add(ReelDTO dto) {
-        // Valid
-        reelRepository.save(mapToEntity(dto));
+    public void add(ReelCreationRequest dto) {
+        ReelDTO reelDTO = new ReelDTO();
+        reelDTO.setName(dto.getName());
+        reelDTO.setPrice(dto.getPrice());
+        reelDTO.setType(typeOfReelService.getById(dto.getTypeId()));
+        reelDTO.setManufacturer(manufacturerService.getById(dto.getManufacturerId()));
+        reelRepository.save(mapToEntity(reelDTO));
     }
 
     @Override
@@ -51,11 +62,11 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
     }
 
     @Override
-    public void edit(ReelDTO dto) {
-        if(!reelRepository.existsReelById(dto.getId())){
-            throw new ReelIsNotExistsException("Reel with this id is not exists");
-        }
-        // Valid
+    public void edit(ReelEditRequest request) {
+        ReelDTO dto = getById(request.getId());
+        dto.setName(request.getName());
+        dto.setPrice(dto.getPrice());
+        dto.setManufacturer(manufacturerService.getById(request.getManufacturerId()));
         reelRepository.save(mapToEntity(dto));
     }
 

@@ -1,6 +1,8 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.TypeOfRodDTO;
+import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
+import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodCreationRequest;
+import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
 import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodAlreadyExistException;
 import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodIsNotExistException;
 import com.example.fishingshop.interfaces.Map;
@@ -36,11 +38,13 @@ public class TypeOfRodServiceImpl implements Map<TypeOfRodDTO, TypeOfRod>, TypeO
     }
 
     @Override
-    public void add(TypeOfRodDTO dto) {
-         if(typeOfRodRepository.existsTypeOfRodByType(dto.getType())){
+    public void add(TypeOfRodCreationRequest request) {
+         if(typeOfRodRepository.existsTypeOfRodByType(request.getType())){
              throw new TypeOfRodAlreadyExistException("Such a type of rod already exists");
          }
-         typeOfRodRepository.save(mapToEntity(dto));
+         TypeOfRodDTO typeOfRodDTO = new TypeOfRodDTO();
+         typeOfRodDTO.setType(request.getType());
+         typeOfRodRepository.save(mapToEntity(typeOfRodDTO));
     }
 
     @Override

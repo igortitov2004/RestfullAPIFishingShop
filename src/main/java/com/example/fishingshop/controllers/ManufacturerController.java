@@ -1,12 +1,9 @@
 package com.example.fishingshop.controllers;
 
-import com.example.fishingshop.DTOs.ManufacturerDTO;
-import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
-import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
+import com.example.fishingshop.DTOs.manufacturer.ManufacturerCreationRequest;
+import com.example.fishingshop.DTOs.manufacturer.ManufacturerDTO;
 import com.example.fishingshop.services.ManufacturerService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.ErrorMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +24,9 @@ public class ManufacturerController {
         return ResponseEntity.ok(manufacturerDTO);
     }
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody ManufacturerDTO manufacturerDTO){
-        manufacturerService.add(manufacturerDTO);
-        return ResponseEntity.ok("Создан производитель" + manufacturerDTO.getName());
+    public ResponseEntity<String> create(@RequestBody ManufacturerCreationRequest request){
+        manufacturerService.add(request);
+        return ResponseEntity.ok("Создан производитель " + request.getName());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){

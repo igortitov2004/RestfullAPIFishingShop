@@ -3,6 +3,7 @@ package com.example.fishingshop.controllers;
 
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartDTO;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartCreationRequest;
+import com.example.fishingshop.DTOs.reelsCart.ReelsCartIncreaseAmountRequest;
 import com.example.fishingshop.services.ReelsCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,6 @@ public class ReelsCartController {
 
     @PutMapping("/")
     public ResponseEntity<String> create(@RequestBody ReelsCartCreationRequest reelsCartCreationRequest){
-
         reelsCartService.add(reelsCartCreationRequest);
         return ResponseEntity.ok("Товар добавлен в корзину");
     }
@@ -39,8 +39,8 @@ public class ReelsCartController {
         return ResponseEntity.ok("Катушки c id пользователя " + id + " удалены из корзины");
     }
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody ReelsCartDTO reelsCartDTO){
-        reelsCartService.edit(reelsCartDTO);
-        return ResponseEntity.ok("Обновлены данные катушки с id " + reelsCartDTO.getId());
+    public ResponseEntity<String> update(@RequestBody ReelsCartIncreaseAmountRequest request){
+        reelsCartService.increaseAmount(request);
+        return ResponseEntity.ok("Обновлены данные катушки с id " + request.getId());
     }
 }

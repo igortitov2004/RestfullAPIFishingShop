@@ -9,7 +9,5 @@ import java.util.List;
 
 @Data
 public class OrderRequest {
-    private List<ReelsForOrderRequestDTO> reelsCartDTOList;
-    private List<RodsForOrderRequestDTO> rodsCartDTOList;
     private String address;
 }

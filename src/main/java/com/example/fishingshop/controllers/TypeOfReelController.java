@@ -1,13 +1,9 @@
 package com.example.fishingshop.controllers;
 
-import com.example.fishingshop.DTOs.TypeOfReelDTO;
-import com.example.fishingshop.DTOs.TypeOfRodDTO;
-import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodAlreadyExistException;
-import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodIsNotExistException;
+import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelCreationRequest;
+import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.services.TypeOfReelService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.ErrorMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +24,9 @@ public class TypeOfReelController {
         return ResponseEntity.ok(typeOfReelDTO);
     }
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody TypeOfReelDTO typeOfReelDTO){
-       typeOfReelService.add(typeOfReelDTO);
-        return ResponseEntity.ok("Создан тип катушки" + typeOfReelDTO.getType());
+    public ResponseEntity<String> create(@RequestBody TypeOfReelCreationRequest request){
+       typeOfReelService.add(request);
+        return ResponseEntity.ok("Создан тип катушки " + request.getType());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
