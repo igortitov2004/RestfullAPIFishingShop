@@ -31,16 +31,17 @@ public class ManufacturerServiceImpl implements
                     .map(this::mapToDTO)
                     .toList();
         }
-        return manufacturerRepository.findAll().stream().map(this::mapToDTO).toList();
+        return manufacturerRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
     @Override
     public void add(ManufacturerCreationRequest request) {
         if(manufacturerRepository.existsManufacturersByName(request.getName())){
             throw new ManufacturerAlreadyExistException("Such a manufacturer already exists");
         }
-        ManufacturerDTO manufacturerDTO = new ManufacturerDTO();
-        manufacturerDTO.setName(request.getName());
-        manufacturerRepository.save(mapToEntity(manufacturerDTO));
+        manufacturerRepository.save(modelMapper.map(request,Manufacturer.class));
     }
     @Override
     public void delete(Long id){

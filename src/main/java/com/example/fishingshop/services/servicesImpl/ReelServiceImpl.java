@@ -40,7 +40,8 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
     }
     @Override
     public void add(ReelCreationRequest request) {
-        if(reelRepository.existsReelByNameAndPriceAndTypeIdAndManufacturerId(request.getName(),
+        if(reelRepository.existsReelByNameAndPriceAndTypeIdAndManufacturerId(
+                request.getName(),
                 request.getPrice(),
                 request.getTypeId(),
                 request.getManufacturerId())){

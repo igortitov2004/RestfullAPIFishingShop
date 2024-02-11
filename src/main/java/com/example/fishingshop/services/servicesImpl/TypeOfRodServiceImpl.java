@@ -21,7 +21,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TypeOfRodServiceImpl implements Map<TypeOfRodDTO, TypeOfRod>, TypeOfRodService {
     private final ModelMapper modelMapper;
-
     private final TypeOfRodRepository typeOfRodRepository;
     @Override
     public List<TypeOfRodDTO> list(String type) {
@@ -36,17 +35,13 @@ public class TypeOfRodServiceImpl implements Map<TypeOfRodDTO, TypeOfRod>, TypeO
                 .map(this::mapToDTO)
                 .toList();
     }
-
     @Override
     public void add(TypeOfRodCreationRequest request) {
          if(typeOfRodRepository.existsTypeOfRodByType(request.getType())){
              throw new TypeOfRodAlreadyExistException("Such a type of rod already exists");
          }
-         TypeOfRodDTO typeOfRodDTO = new TypeOfRodDTO();
-         typeOfRodDTO.setType(request.getType());
-         typeOfRodRepository.save(mapToEntity(typeOfRodDTO));
+         typeOfRodRepository.save(modelMapper.map(request,TypeOfRod.class));
     }
-
     @Override
     public void delete(Long id) {
         if(!typeOfRodRepository.existsTypeOfRodById(id)){
@@ -54,7 +49,6 @@ public class TypeOfRodServiceImpl implements Map<TypeOfRodDTO, TypeOfRod>, TypeO
         }
         typeOfRodRepository.deleteById(id);
     }
-
     @Override
     public void edit(TypeOfRodDTO dto) {
         if(!typeOfRodRepository.existsTypeOfRodById(dto.getId())){
@@ -68,20 +62,17 @@ public class TypeOfRodServiceImpl implements Map<TypeOfRodDTO, TypeOfRod>, TypeO
         }
         typeOfRodRepository.save(mapToEntity(dto));
     }
-
     @Override
-    public TypeOfRodDTO getById(Long id) {
+    public TypeOfRodDTO getById(Long id){
         if(!typeOfRodRepository.existsTypeOfRodById(id)){
             throw new TypeOfRodIsNotExistException("Type of rod with this id is not exist");
         }
         return typeOfRodRepository.findById(id).map(this::mapToDTO).get();
     }
-
     @Override
     public TypeOfRodDTO mapToDTO(TypeOfRod entity) {
         return modelMapper.map(entity,TypeOfRodDTO.class);
     }
-
     @Override
     public TypeOfRod mapToEntity(TypeOfRodDTO dto) {
         return modelMapper.map(dto,TypeOfRod.class);

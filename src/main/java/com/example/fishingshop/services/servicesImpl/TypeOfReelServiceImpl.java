@@ -4,8 +4,11 @@ import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelCreationRequest;
 import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.exceptions.typeOfReelExceptions.TypeOfReelAlreadyExistsException;
 import com.example.fishingshop.exceptions.typeOfReelExceptions.TypeOfReelIsNotExistsException;
+import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodAlreadyExistException;
+import com.example.fishingshop.exceptions.typeOfRodExceptions.TypeOfRodIsNotExistException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.TypeOfReel;
+import com.example.fishingshop.models.TypeOfRod;
 import com.example.fishingshop.repositories.TypeOfReelRepository;
 import com.example.fishingshop.services.TypeOfReelService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +45,8 @@ public class TypeOfReelServiceImpl implements Map<TypeOfReelDTO,TypeOfReel>, Typ
         if(typeOfReelRepository.existsTypeOfReelByType(request.getType())){
              throw new TypeOfReelAlreadyExistsException("Such a type of reel is already exists");
         }
-        TypeOfReelDTO typeOfReelDTO = new TypeOfReelDTO();
-        typeOfReelDTO.setType(request.getType());
-        typeOfReelRepository.save(mapToEntity(typeOfReelDTO));
+
+        typeOfReelRepository.save(modelMapper.map(request,TypeOfReel.class));
     }
 
     @Override
@@ -55,6 +59,15 @@ public class TypeOfReelServiceImpl implements Map<TypeOfReelDTO,TypeOfReel>, Typ
 
     @Override
     public void edit(TypeOfReelDTO dto) {
+        if(!typeOfReelRepository.existsTypeOfReelById(dto.getId())){
+            throw new TypeOfReelIsNotExistsException("Type of rod with this id is not exist");
+        }
+        Optional<TypeOfReel> typeOfReelOptional =
+                Optional.ofNullable(typeOfReelRepository.findTypeOfReelByType(dto.getType()));
+        if(typeOfReelOptional.isPresent()
+                && !Objects.equals(typeOfReelOptional.get().getId(), dto.getId())){
+            throw new TypeOfReelAlreadyExistsException("Such a type of rod already exists");
+        }
         typeOfReelRepository.save(mapToEntity(dto));
     }
 
