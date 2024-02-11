@@ -9,6 +9,14 @@ import java.util.List;
 @Repository
 public interface RodRepository extends JpaRepository<Rod,Long> {
     List<Rod> findRodByNameContaining(String name);
-
     boolean existsRodById(Long id);
+    boolean existsRodByNameAndLengthAndWeightAndTestLoadAndPriceAndTypeIdAndManufacturerId(
+            String name,
+            Integer length,
+            Integer weight,
+            Integer testLoad,
+            Double price,
+            Long idType,
+            Long idManufacturer
+    );
 }

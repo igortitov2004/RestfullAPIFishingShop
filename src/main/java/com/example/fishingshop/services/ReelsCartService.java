@@ -1,5 +1,6 @@
 package com.example.fishingshop.services;
 
+import com.example.fishingshop.DTOs.reelsCart.ReelCartResponse;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartDTO;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartCreationRequest;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartIncreaseAmountRequest;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public interface ReelsCartService {
 
-    List<ReelsCartDTO> listByUserId(Long id);
+    List<ReelCartResponse> listByUserId(Long id);
     void deleteById(Long id);
     void deleteByUserId(Long id);
     void add(ReelsCartCreationRequest reelsCartCreationRequest);

@@ -11,4 +11,9 @@ import java.util.List;
 public interface ReelRepository extends JpaRepository<Reel,Long>{
     List<Reel> findReelByNameContaining(String name);
     boolean existsReelById(Long id);
+
+    boolean existsReelByNameAndPriceAndTypeIdAndManufacturerId(String name,
+                                                               Double price,
+                                                               Long idType,
+                                                               Long idManufacturer);
 }

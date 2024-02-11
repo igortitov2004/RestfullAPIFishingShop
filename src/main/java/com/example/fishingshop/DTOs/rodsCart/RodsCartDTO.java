@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class RodsCartDTO {
-
     private Long id;
     private RodDTO rod;
     private Integer amount;

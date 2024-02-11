@@ -4,6 +4,7 @@ package com.example.fishingshop.services.servicesImpl;
 import com.example.fishingshop.DTOs.reel.ReelCreationRequest;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
 import com.example.fishingshop.DTOs.reel.ReelEditRequest;
+import com.example.fishingshop.exceptions.reelExceptions.ReelAlreadyExistsException;
 import com.example.fishingshop.exceptions.reelExceptions.ReelIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Reel;
@@ -20,15 +21,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
-
     private final ModelMapper modelMapper;
-
     private final ReelRepository reelRepository;
-
     private final ManufacturerService manufacturerService;
     private final TypeOfReelService typeOfReelService;
-
-
     @Override
     public List<ReelDTO> list(String name) {
         if(name!=null){
@@ -42,17 +38,22 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
                 .map(this::mapToDTO)
                 .toList();
     }
-
     @Override
-    public void add(ReelCreationRequest dto) {
-        ReelDTO reelDTO = new ReelDTO();
-        reelDTO.setName(dto.getName());
-        reelDTO.setPrice(dto.getPrice());
-        reelDTO.setType(typeOfReelService.getById(dto.getTypeId()));
-        reelDTO.setManufacturer(manufacturerService.getById(dto.getManufacturerId()));
+    public void add(ReelCreationRequest request) {
+        if(reelRepository.existsReelByNameAndPriceAndTypeIdAndManufacturerId(request.getName(),
+                request.getPrice(),
+                request.getTypeId(),
+                request.getManufacturerId())){
+            throw new ReelAlreadyExistsException("Such a reel is already exists");
+        }
+        ReelDTO reelDTO = ReelDTO.builder()
+                .name(request.getName())
+                .price(request.getPrice())
+                .type(typeOfReelService.getById(request.getTypeId()))
+                .manufacturer(manufacturerService.getById(request.getManufacturerId()))
+                .build();
         reelRepository.save(mapToEntity(reelDTO));
     }
-
     @Override
     public void delete(Long id) {
         if(!reelRepository.existsReelById(id)){
@@ -60,7 +61,6 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
         }
         reelRepository.deleteById(id);
     }
-
     @Override
     public void edit(ReelEditRequest request) {
         ReelDTO dto = getById(request.getId());
@@ -69,7 +69,6 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
         dto.setManufacturer(manufacturerService.getById(request.getManufacturerId()));
         reelRepository.save(mapToEntity(dto));
     }
-
     @Override
     public ReelDTO getById(Long id) {
         if(!reelRepository.existsReelById(id)){

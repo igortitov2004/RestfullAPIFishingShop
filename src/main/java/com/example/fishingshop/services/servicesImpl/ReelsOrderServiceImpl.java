@@ -3,6 +3,7 @@ package com.example.fishingshop.services.servicesImpl;
 
 import com.example.fishingshop.DTOs.orders.ReelsForOrderResponse;
 import com.example.fishingshop.DTOs.orders.ReelsOrderDTO;
+import com.example.fishingshop.DTOs.reelsCart.ReelCartResponse;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartDTO;
 import com.example.fishingshop.exceptions.reelsOrderExceptions.ReelsOrderIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
@@ -54,10 +55,10 @@ public class ReelsOrderServiceImpl implements Map<ReelsOrderDTO, ReelsOrder>, Re
         return reelsOrderRepository.findById(id).map(this::mapToDTO).get();
     }
     public void add(Order order) {
-        for(ReelsCartDTO dto:reelsCartService.listByUserId(1L)){
+        for(ReelCartResponse response:reelsCartService.listByUserId(order.getUser().getId())){
             ReelsOrderDTO reelsOrderDTO = new ReelsOrderDTO();
-            reelsOrderDTO.setReel(dto.getReel());
-            reelsOrderDTO.setAmount(dto.getAmount());
+            reelsOrderDTO.setReel(response.getReel());
+            reelsOrderDTO.setAmount(response.getAmount());
             ReelsOrder reelsOrder = mapToEntity(reelsOrderDTO);
             reelsOrder.setOrder(order);
             reelsOrderRepository.save(reelsOrder);

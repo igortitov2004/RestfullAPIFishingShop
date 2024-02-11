@@ -27,7 +27,6 @@ public class Rod {
     private Integer weight;
     @Column(name = "testLoad")
     private Integer testLoad;
-
     @Column(name = "price")
     private Double price;
     @ManyToOne
@@ -36,10 +35,8 @@ public class Rod {
     @ManyToOne
     @JoinColumn(name="manufacturer")
     private Manufacturer manufacturer;
-
     @OneToMany(mappedBy = "rod")
     private List<RodsCart> rodsCarts;
-
     @OneToMany(mappedBy = "rod")
     private List<RodsOrder> rodsOrders;
 }

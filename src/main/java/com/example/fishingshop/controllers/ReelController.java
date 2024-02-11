@@ -29,7 +29,7 @@ public class ReelController {
     @PutMapping("/")
     public ResponseEntity<String> create(@RequestBody ReelCreationRequest request){
         reelService.add(request);
-        return ResponseEntity.ok("Создана катушка" + request.getName());
+        return ResponseEntity.ok("Создана катушка " + request.getName());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){

@@ -3,6 +3,7 @@ package com.example.fishingshop.services.servicesImpl;
 
 import com.example.fishingshop.DTOs.orders.RodsForOrderResponse;
 import com.example.fishingshop.DTOs.orders.RodsOrderDTO;
+import com.example.fishingshop.DTOs.rodsCart.RodCartResponse;
 import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
 import com.example.fishingshop.exceptions.rodsOrderExceptions.RodsOrderIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
@@ -24,14 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsOrderService {
     private final ModelMapper modelMapper;
-
     private final RodsOrderRepository rodsOrderRepository;
-
-    private final RodService rodService;
-    private final UserService userService;
-
     private final RodsCartService rodsCartService;
-
     @Override
     public List<RodsForOrderResponse> listByOrderId(Long id) {
         List<RodsOrderDTO> rodsOrderDTOlist =
@@ -45,9 +40,6 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
         }
         return responseList;
     }
-
-
-
     @Override
     public void deleteById(Long id) {
         if(!rodsOrderRepository.existsRodsOrderById(id)){
@@ -55,20 +47,18 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
         }
         rodsOrderRepository.deleteById(id);
     }
-
+    @Override
     public void add(Order order) {
-        for(RodsCartDTO dto:rodsCartService.listByUserId(1L)) {
+        for(RodCartResponse response:rodsCartService.listByUserId(order.getUser().getId())) {
             RodsOrderDTO rodsOrderDTO = new RodsOrderDTO();
-            rodsOrderDTO.setRod(dto.getRod());
-            rodsOrderDTO.setAmount(dto.getAmount());
+            rodsOrderDTO.setRod(response.getRod());
+            rodsOrderDTO.setAmount(response.getAmount());
             RodsOrder rodsOrder = mapToEntity(rodsOrderDTO);
             rodsOrder.setOrder(order);
             rodsOrderRepository.save(rodsOrder);
         }
         rodsCartService.deleteByUserId(order.getUser().getId());
     }
-
-
     @Override
     public RodsOrderDTO mapToDTO(RodsOrder entity) {
         return modelMapper.map(entity,RodsOrderDTO.class);

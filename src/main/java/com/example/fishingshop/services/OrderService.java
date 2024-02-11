@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface OrderService {
     Order add(String address);
-
     List<OrderResponse> list(Long userId);
-
     void deleteById(Long id);
 }

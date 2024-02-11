@@ -3,6 +3,7 @@ package com.example.fishingshop.services.servicesImpl;
 import com.example.fishingshop.DTOs.rod.RodCreationRequest;
 import com.example.fishingshop.DTOs.rod.RodDTO;
 import com.example.fishingshop.DTOs.rod.RodEditRequest;
+import com.example.fishingshop.exceptions.rodExceptions.RodAlreadyExistsException;
 import com.example.fishingshop.exceptions.rodExceptions.RodIsNotExistException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Rod;
@@ -10,6 +11,7 @@ import com.example.fishingshop.repositories.RodRepository;
 import com.example.fishingshop.services.ManufacturerService;
 import com.example.fishingshop.services.RodService;
 import com.example.fishingshop.services.TypeOfRodService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -37,15 +39,27 @@ public class RodServiceImpl implements Map<RodDTO, Rod>, RodService {
                 .toList();
     }
     @Override
-    public void add(RodCreationRequest dto) {
-        RodDTO rodDTO = new RodDTO();
-        rodDTO.setName(dto.getName());
-        rodDTO.setPrice(dto.getPrice());
-        rodDTO.setLength(dto.getLength());
-        rodDTO.setTestLoad(dto.getTestLoad());
-        rodDTO.setWeight(dto.getWeight());
-        rodDTO.setManufacturer(manufacturerService.getById(dto.getManufacturerId()));
-        rodDTO.setType(typeOfRodService.getById(dto.getTypeId()));
+    public void add(RodCreationRequest request) {
+        if(rodRepository.existsRodByNameAndLengthAndWeightAndTestLoadAndPriceAndTypeIdAndManufacturerId(
+                request.getName(),
+                request.getLength(),
+                request.getWeight(),
+                request.getTestLoad(),
+                request.getPrice(),
+                request.getTypeId(),
+                request.getManufacturerId()
+        )){
+            throw new RodAlreadyExistsException("Such a rod is already exists");
+        }
+        RodDTO rodDTO = RodDTO.builder()
+                .name(request.getName())
+                .price(request.getPrice())
+                .length(request.getLength())
+                .testLoad(request.getTestLoad())
+                .weight(request.getWeight())
+                .manufacturer(manufacturerService.getById(request.getManufacturerId()))
+                .type(typeOfRodService.getById(request.getTypeId()))
+                .build();
         rodRepository.save(mapToEntity(rodDTO));
     }
     @Override

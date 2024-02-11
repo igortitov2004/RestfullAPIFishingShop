@@ -1,6 +1,7 @@
 package com.example.fishingshop.controllers;
 
 import com.example.fishingshop.DTOs.rodsCart.RodCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.rodsCart.RodCartResponse;
 import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
 import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
 import com.example.fishingshop.services.RodsCartService;
@@ -16,11 +17,9 @@ import java.util.List;
 public class RodsCartController {
     private final RodsCartService rodsCartService;
     @GetMapping("/user/{id}")
-    public List<RodsCartDTO> list(@PathVariable Long id){
-       return rodsCartService.listByUserId(id);
+    public ResponseEntity<List<RodCartResponse>> list(@PathVariable Long id){
+       return ResponseEntity.ok(rodsCartService.listByUserId(id));
     }
-
-
     @PutMapping("/")
     public ResponseEntity<String> create(@RequestBody RodsCartCreationRequest rodsCartCreationRequest){
         rodsCartService.add(rodsCartCreationRequest);
