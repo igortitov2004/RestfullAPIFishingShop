@@ -29,23 +29,10 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
     private final RodsCartService rodsCartService;
     @Override
     public List<RodsForOrderResponse> listByOrderId(Long id) {
-        List<RodsOrderDTO> rodsOrderDTOlist =
-                rodsOrderRepository.findRodsOrderByOrderId(id)
+       return rodsOrderRepository.findRodsOrderByOrderId(id)
                 .stream()
-                .map(this::mapToDTO)
+                .map(this::mapToResponse)
                 .toList();
-        List<RodsForOrderResponse> responseList = new ArrayList<>();
-        for (RodsOrderDTO dto:rodsOrderDTOlist){
-            responseList.add(modelMapper.map(dto,RodsForOrderResponse.class));
-        }
-        return responseList;
-    }
-    @Override
-    public void deleteById(Long id) {
-        if(!rodsOrderRepository.existsRodsOrderById(id)){
-            throw new RodsOrderIsNotExistsException("Rods order with this id is not exists");
-        }
-        rodsOrderRepository.deleteById(id);
     }
     @Override
     public void add(Order order) {
@@ -68,5 +55,7 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
         return modelMapper.map(dto,RodsOrder.class);
     }
 
-
+    public RodsForOrderResponse mapToResponse(RodsOrder entity){
+        return modelMapper.map(entity,RodsForOrderResponse.class);
+    }
 }

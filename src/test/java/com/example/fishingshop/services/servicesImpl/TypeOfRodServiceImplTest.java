@@ -92,25 +92,19 @@ class TypeOfRodServiceImplTest {
     }
     @Test
     void delete_whenExists(){
-        TypeOfRod typeOfRod = new TypeOfRod();
-        typeOfRod.setId(100L);
+        Mockito.when(typeOfRodRepository.existsTypeOfRodById(1L)).thenReturn(true);
 
-        Mockito.when(typeOfRodRepository.existsTypeOfRodById(typeOfRod.getId())).thenReturn(true);
+        typeOfRodServiceImpl.delete(1L);
 
-        typeOfRodServiceImpl.delete(typeOfRod.getId());
-
-        Mockito.verify(typeOfRodRepository,Mockito.times(1)).deleteById(typeOfRod.getId());
+        Mockito.verify(typeOfRodRepository,Mockito.times(1)).deleteById(1L);
     }
     @Test()
     void delete_whenNotExists(){
-        TypeOfRod typeOfRod = new TypeOfRod();
-        typeOfRod.setId(1L);
+        Mockito.when(typeOfRodRepository.existsTypeOfRodById(1L)).thenReturn(false);
 
-        Mockito.when(typeOfRodRepository.existsTypeOfRodById(typeOfRod.getId())).thenReturn(false);
+        assertThrows(TypeOfRodIsNotExistException.class, () -> typeOfRodServiceImpl.delete(1L));
 
-        assertThrows(TypeOfRodIsNotExistException.class, () -> typeOfRodServiceImpl.delete(typeOfRod.getId()));
-
-        Mockito.verify(typeOfRodRepository,Mockito.times(0)).deleteById(typeOfRod.getId());
+        Mockito.verify(typeOfRodRepository,Mockito.times(0)).deleteById(1L);
     }
     @Test
     void edit_whenNotExistsById(){

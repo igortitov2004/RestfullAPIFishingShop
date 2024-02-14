@@ -91,25 +91,19 @@ class TypeOfReelServiceImplTest {
     }
     @Test
     void delete_whenExists(){
-        TypeOfReel typeOfReel = new TypeOfReel();
-        typeOfReel.setId(100L);
+        Mockito.when(typeOfReelRepository.existsTypeOfReelById(1L)).thenReturn(true);
 
-        Mockito.when(typeOfReelRepository.existsTypeOfReelById(typeOfReel.getId())).thenReturn(true);
+        typeOfReelServiceImpl.delete(1L);
 
-        typeOfReelServiceImpl.delete(typeOfReel.getId());
-
-        Mockito.verify(typeOfReelRepository,Mockito.times(1)).deleteById(typeOfReel.getId());
+        Mockito.verify(typeOfReelRepository,Mockito.times(1)).deleteById(1L);
     }
     @Test()
     void delete_whenNotExists(){
-        TypeOfReel typeOfReel = new TypeOfReel();
-        typeOfReel.setId(1L);
+        Mockito.when(typeOfReelRepository.existsTypeOfReelById(1L)).thenReturn(false);
 
-        Mockito.when(typeOfReelRepository.existsTypeOfReelById(typeOfReel.getId())).thenReturn(false);
+        assertThrows(TypeOfReelIsNotExistsException.class, () -> typeOfReelServiceImpl.delete(1L));
 
-        assertThrows(TypeOfReelIsNotExistsException.class, () -> typeOfReelServiceImpl.delete(typeOfReel.getId()));
-
-        Mockito.verify(typeOfReelRepository,Mockito.times(0)).deleteById(typeOfReel.getId());
+        Mockito.verify(typeOfReelRepository,Mockito.times(0)).deleteById(1L);
     }
     @Test
     void edit_whenNotExistsById(){

@@ -14,6 +14,4 @@ public interface RodsOrderRepository extends JpaRepository<RodsOrder,Long> {
     boolean existsRodsOrderById(Long id);
 
     boolean existsRodsOrderByOrderId(Long id);
-
-
 }

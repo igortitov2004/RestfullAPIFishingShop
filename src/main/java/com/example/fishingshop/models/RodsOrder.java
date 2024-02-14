@@ -1,10 +1,7 @@
 package com.example.fishingshop.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "rods_orders")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RodsOrder {

@@ -130,25 +130,19 @@ class ReelServiceImplTest {
     }
     @Test
     void delete_whenExists(){
-        Reel reel = new Reel();
-        reel.setId(100L);
+        Mockito.when(reelRepository.existsReelById(1L)).thenReturn(true);
 
-        Mockito.when(reelRepository.existsReelById(reel.getId())).thenReturn(true);
+        reelServiceImpl.delete(1L);
 
-        reelServiceImpl.delete(reel.getId());
-
-        Mockito.verify(reelRepository,Mockito.times(1)).deleteById(reel.getId());
+        Mockito.verify(reelRepository,Mockito.times(1)).deleteById(1L);
     }
     @Test()
     void delete_whenNotExists(){
-        Reel reel = new Reel();
-        reel.setId(1L);
+        Mockito.when(reelRepository.existsReelById(1L)).thenReturn(false);
 
-        Mockito.when(reelRepository.existsReelById(reel.getId())).thenReturn(false);
+        assertThrows(ReelIsNotExistsException.class, () -> reelServiceImpl.delete(1L));
 
-        assertThrows(ReelIsNotExistsException.class, () -> reelServiceImpl.delete(reel.getId()));
-
-        Mockito.verify(reelRepository,Mockito.times(0)).deleteById(reel.getId());
+        Mockito.verify(reelRepository,Mockito.times(0)).deleteById(1L);
     }
     @Test
     void getById_whenExists() {

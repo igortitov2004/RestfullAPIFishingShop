@@ -90,25 +90,19 @@ class ManufacturerServiceImplTest {
     }
     @Test
     void delete_whenExists(){
-        Manufacturer manufacturer = new Manufacturer();
-        manufacturer.setId(100L);
+        Mockito.when(manufacturerRepository.existsManufacturersById(1L)).thenReturn(true);
 
-        Mockito.when(manufacturerRepository.existsManufacturersById(manufacturer.getId())).thenReturn(true);
+        manufacturerServiceImpl.delete(1L);
 
-        manufacturerServiceImpl.delete(manufacturer.getId());
-
-        Mockito.verify(manufacturerRepository,Mockito.times(1)).deleteById(manufacturer.getId());
+        Mockito.verify(manufacturerRepository,Mockito.times(1)).deleteById(1L);
     }
     @Test()
     void delete_whenNotExists(){
-        Manufacturer manufacturer = new Manufacturer();
-        manufacturer.setId(1L);
+        Mockito.when(manufacturerRepository.existsManufacturersById(1L)).thenReturn(false);
 
-        Mockito.when(manufacturerRepository.existsManufacturersById(manufacturer.getId())).thenReturn(false);
+        assertThrows(ManufacturerIsNotExistException.class, () -> manufacturerServiceImpl.delete(1L));
 
-        assertThrows(ManufacturerIsNotExistException.class, () -> manufacturerServiceImpl.delete(manufacturer.getId()));
-
-        Mockito.verify(manufacturerRepository,Mockito.times(0)).deleteById(manufacturer.getId());
+        Mockito.verify(manufacturerRepository,Mockito.times(0)).deleteById(1L);
     }
     @Test
     void edit_whenNotExistsById(){

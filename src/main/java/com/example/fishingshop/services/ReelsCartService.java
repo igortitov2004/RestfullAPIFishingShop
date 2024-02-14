@@ -20,5 +20,5 @@ public interface ReelsCartService {
 
     ReelsCartDTO getById(Long id);
 
-    Optional<ReelsCart> reelCartByUserIdAndReelId(Long userId,Long reelId);
+
 }

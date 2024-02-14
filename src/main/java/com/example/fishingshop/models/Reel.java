@@ -3,6 +3,7 @@ package com.example.fishingshop.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "reels")
 @Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reel {

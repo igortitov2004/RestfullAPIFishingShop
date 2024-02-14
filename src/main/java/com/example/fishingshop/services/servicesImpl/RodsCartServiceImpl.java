@@ -73,7 +73,7 @@ public class RodsCartServiceImpl implements RodsCartService, Map<RodsCartDTO,Rod
     }
     @Override
     public Optional<RodsCart> reelCartByUserIdAndRodId(Long userId, Long rodId) {
-        return rodsCartRepository.findReelsCartByUserIdAndRodId(userId,rodId);
+        return rodsCartRepository.findRodsCartByUserIdAndRodId(userId,rodId);
     }
 
     @Override

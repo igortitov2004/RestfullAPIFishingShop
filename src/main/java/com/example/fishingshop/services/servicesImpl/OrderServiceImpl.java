@@ -6,6 +6,7 @@ import com.example.fishingshop.DTOs.orders.OrderResponse;
 import com.example.fishingshop.exceptions.orderExceptions.OrderIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Order;
+import com.example.fishingshop.models.User;
 import com.example.fishingshop.repositories.OrderRepository;
 import com.example.fishingshop.repositories.UserRepository;
 import com.example.fishingshop.services.*;
@@ -20,20 +21,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements Map<OrderDTO,Order>,OrderService {
     private final ModelMapper modelMapper;
-
-
-
     private final OrderRepository orderRepository;
 
     private final ReelsOrderService reelsOrderService;
     private final RodsOrderService rodsOrderService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public Order add(String address) {
         Order order = new Order();
         order.setAddress(address);
-        order.setUser(userRepository.findById(2L).get());
+        order.setUser(modelMapper.map(userService.getById(2L), User.class));
         order=orderRepository.save(order);
         reelsOrderService.add(order);
         rodsOrderService.add(order);
@@ -64,8 +62,6 @@ public class OrderServiceImpl implements Map<OrderDTO,Order>,OrderService {
         if(!orderRepository.existsOrderById(id)){
             throw new OrderIsNotExistsException("Order with this id is not exists");
         }
-//        rodsOrderService.deleteByOrderId(id);
-//        reelsOrderService.deleteByOrderId(id);
         orderRepository.deleteById(id);
     }
 

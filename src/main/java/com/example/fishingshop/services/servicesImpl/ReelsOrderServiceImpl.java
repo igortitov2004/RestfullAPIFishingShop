@@ -25,35 +25,16 @@ public class ReelsOrderServiceImpl implements Map<ReelsOrderDTO, ReelsOrder>, Re
 
     private final ModelMapper modelMapper;
     private final ReelsOrderRepository reelsOrderRepository;
-    private final ReelService reelService;
     private final ReelsCartService reelsCartService;
 
     @Override
     public List<ReelsForOrderResponse> listByOrderId(Long id) {
-        List<ReelsOrderDTO> reelsOrderDTOList =
-                reelsOrderRepository.findReelsOrderByOrderId(id)
-                        .stream()
-                        .map(this::mapToDTO)
-                        .toList();
-        List<ReelsForOrderResponse> responseList = new ArrayList<>();
-        for (ReelsOrderDTO dto:reelsOrderDTOList){
-            responseList.add(modelMapper.map(dto,ReelsForOrderResponse.class));
-        }
-        return responseList;
+        return reelsOrderRepository.findReelsOrderByOrderId(id)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
-    @Override
-    public void deleteById(Long id) {
-        if(reelsOrderRepository.existsReelsOrderById(id)){
-            throw new ReelsOrderIsNotExistsException("Reels order with this id is not exists");
-        }
-        reelsOrderRepository.deleteById(id);
-    }
-    public ReelsOrderDTO getById(Long id){
-        if(!reelsOrderRepository.existsReelsOrderById(id)){
-            throw new ReelsOrderIsNotExistsException("Reels order with this id is not exists");
-        }
-        return reelsOrderRepository.findById(id).map(this::mapToDTO).get();
-    }
+
     public void add(Order order) {
         for(ReelCartResponse response:reelsCartService.listByUserId(order.getUser().getId())){
             ReelsOrderDTO reelsOrderDTO = new ReelsOrderDTO();
@@ -72,5 +53,9 @@ public class ReelsOrderServiceImpl implements Map<ReelsOrderDTO, ReelsOrder>, Re
     @Override
     public ReelsOrder mapToEntity(ReelsOrderDTO dto) {
         return modelMapper.map(dto,ReelsOrder.class);
+    }
+
+    public ReelsForOrderResponse mapToResponse(ReelsOrder entity){
+        return modelMapper.map(entity,ReelsForOrderResponse.class);
     }
 }

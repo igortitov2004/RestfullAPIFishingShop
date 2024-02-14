@@ -75,15 +75,18 @@ public class ReelsCartServiceImpl implements Map<ReelsCartDTO, ReelsCart>,ReelsC
         reelsCart.setAmount(reelsCart.getAmount()+1);
         reelsCartRepository.save(reelsCart);
     }
-    @Override
-    public Optional<ReelsCart> reelCartByUserIdAndReelId(Long userId, Long reelId) {
+
+    private Optional<ReelsCart> reelCartByUserIdAndReelId(Long userId, Long reelId) {
         return reelsCartRepository.findReelsCartByUserIdAndReelId(userId,reelId);
     }
     @Override
     public void increaseAmount(ReelsCartIncreaseAmountRequest request){
-       ReelsCartDTO dto = getById(request.getId());
-       dto.setAmount(dto.getAmount()+1);
-       reelsCartRepository.save(mapToEntity(dto));
+        if(!reelsCartRepository.existsReelsCartById(request.getId())){
+            throw new ReelsCartIsNotExistsException("Reels cart with this user id is not exists");
+        }
+        ReelsCartDTO dto = getById(request.getId());
+        dto.setAmount(dto.getAmount()+1);
+        reelsCartRepository.save(mapToEntity(dto));
     }
     @Override
     public ReelsCartDTO getById(Long id) {

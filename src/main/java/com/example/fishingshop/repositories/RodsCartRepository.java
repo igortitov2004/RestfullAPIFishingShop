@@ -19,7 +19,7 @@ public interface RodsCartRepository extends JpaRepository<RodsCart,Long> {
 
     void deleteRodsCartByUserId(Long id);
 
-    Optional<RodsCart> findReelsCartByUserIdAndRodId(Long idUser, Long idRod);
+    Optional<RodsCart> findRodsCartByUserIdAndRodId(Long idUser, Long idRod);
     void deleteAllByUserId(Long id);
 
 

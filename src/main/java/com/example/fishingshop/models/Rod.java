@@ -1,16 +1,14 @@
 package com.example.fishingshop.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Rods")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 

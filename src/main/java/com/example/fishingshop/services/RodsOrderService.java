@@ -9,6 +9,6 @@ import java.util.List;
 public interface RodsOrderService {
 
     List<RodsForOrderResponse> listByOrderId(Long id);
-    void deleteById(Long id);
+
     void add(Order order);
 }
