@@ -3,8 +3,10 @@ package com.example.fishingshop.services.servicesImpl;
 import com.example.fishingshop.DTOs.manufacturer.ManufacturerDTO;
 import com.example.fishingshop.DTOs.reel.ReelCreationRequest;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
+import com.example.fishingshop.DTOs.reel.ReelEditRequest;
 import com.example.fishingshop.DTOs.rod.RodCreationRequest;
 import com.example.fishingshop.DTOs.rod.RodDTO;
+import com.example.fishingshop.DTOs.rod.RodEditRequest;
 import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
 import com.example.fishingshop.exceptions.reelExceptions.ReelAlreadyExistsException;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 class RodServiceImplTest {
@@ -169,6 +172,118 @@ class RodServiceImplTest {
                 request.getManufacturerId())).thenReturn(true);
 
         assertThrows(RodAlreadyExistsException.class,()-> rodServiceImpl.add(request));
+    }
+
+    @Test
+    void edit_whenNotExistsById(){
+        RodEditRequest request = RodEditRequest.builder()
+                .id(1L)
+                .build();
+        Mockito.when(rodRepository.existsRodById(request.getId())).thenReturn(false);
+
+        assertThrows(RodIsNotExistException.class,()->rodServiceImpl.edit(new RodEditRequest()));
+
+        Mockito.verify(rodRepository,Mockito.times(0)).save(any());
+    }
+    @Test
+    void edit_whenSuchReelExists(){
+        RodEditRequest request = RodEditRequest.builder()
+                .id(1L)
+                .name("name")
+                .price(1d)
+                .manufacturerId(1L)
+                .build();
+        RodDTO dto = RodDTO.builder()
+                .id(1L)
+                .name("name")
+                .length(1)
+                .testLoad(1)
+                .weight(1)
+                .price(1d)
+                .manufacturer(new ManufacturerDTO())
+                .type(new TypeOfRodDTO())
+                .build();
+        Rod rod = Rod.builder()
+                .id(1L)
+                .name("name")
+                .length(1)
+                .testLoad(1)
+                .weight(1)
+                .price(1d)
+                .manufacturer(new Manufacturer())
+                .type(new TypeOfRod())
+                .build();
+        Rod rodForOptional = Rod.builder()
+                .id(2L)
+                .name("name")
+                .length(1)
+                .testLoad(1)
+                .weight(1)
+                .price(1d)
+                .manufacturer(new Manufacturer())
+                .type(new TypeOfRod())
+                .build();
+        Mockito.when(rodRepository.existsRodById(request.getId())).thenReturn(true);
+        Mockito.when(rodRepository.findById(request.getId())).thenReturn(Optional.ofNullable(rod));
+        Mockito.when(modelMapper.map(rod,RodDTO.class)).thenReturn(dto);
+        Mockito.when(rodRepository.findRodByNameAndLengthAndWeightAndTestLoadAndPriceAndTypeIdAndManufacturerId(
+                request.getName(),
+                dto.getLength(),
+                dto.getWeight(),
+                dto.getTestLoad(),
+                request.getPrice(),
+                dto.getType().getId(),
+                request.getManufacturerId())).thenReturn(Optional.ofNullable(rodForOptional));
+        assertThrows(RodAlreadyExistsException.class,()->rodServiceImpl.edit(request));
+    }
+    @Test
+    void edit_whenSuchReelIsNotExists(){
+        RodEditRequest request = RodEditRequest.builder()
+                .id(1L)
+                .name("name")
+                .price(1d)
+                .manufacturerId(1L)
+                .build();
+        RodDTO dto = RodDTO.builder()
+                .id(1L)
+                .name("name")
+                .length(1)
+                .testLoad(1)
+                .weight(1)
+                .price(1d)
+                .manufacturer(new ManufacturerDTO())
+                .type(new TypeOfRodDTO())
+                .build();
+        Rod rod = Rod.builder()
+                .id(1L)
+                .name("name")
+                .length(1)
+                .testLoad(1)
+                .weight(1)
+                .price(1d)
+                .manufacturer(new Manufacturer())
+                .type(new TypeOfRod())
+                .build();
+
+        Mockito.when(rodRepository.existsRodById(request.getId())).thenReturn(true);
+        Mockito.when(rodRepository.findById(request.getId())).thenReturn(Optional.ofNullable(rod));
+        Mockito.when(modelMapper.map(rod,RodDTO.class)).thenReturn(dto);
+        Mockito.when(rodRepository.findRodByNameAndLengthAndWeightAndTestLoadAndPriceAndTypeIdAndManufacturerId(
+                request.getName(),
+                dto.getLength(),
+                dto.getWeight(),
+                dto.getTestLoad(),
+                request.getPrice(),
+                dto.getType().getId(),
+                request.getManufacturerId())).thenReturn(Optional.ofNullable(rod));
+        Mockito.when(manufacturerServiceImpl.getById(1L)).thenReturn(new ManufacturerDTO());
+        Mockito.when(modelMapper.map(dto,Rod.class)).thenReturn(rod);
+
+        rodServiceImpl.edit(request);
+
+        assertNotNull(rod);
+
+        Mockito.verify(rodRepository,Mockito.times(1)).save(rod);
     }
     @Test
     void delete_whenExists(){

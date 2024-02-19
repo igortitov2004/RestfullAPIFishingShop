@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReelRepository extends JpaRepository<Reel,Long>{
@@ -16,4 +17,8 @@ public interface ReelRepository extends JpaRepository<Reel,Long>{
                                                                Double price,
                                                                Long idType,
                                                                Long idManufacturer);
+    Optional<Reel> findReelByNameAndPriceAndTypeIdAndManufacturerId(String name,
+                                                     Double price,
+                                                     Long idType,
+                                                     Long idManufacturer);
 }

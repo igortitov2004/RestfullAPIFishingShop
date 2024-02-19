@@ -17,6 +17,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -64,10 +67,22 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
     }
     @Override
     public void edit(ReelEditRequest request) {
+        if(!reelRepository.existsReelById(request.getId())){
+            throw new ReelIsNotExistsException("Reel with this id is not exists");
+        }
         ReelDTO dto = getById(request.getId());
-        dto.setName(request.getName());
-        dto.setPrice(dto.getPrice());
-        dto.setManufacturer(manufacturerService.getById(request.getManufacturerId()));
+        Optional<Reel> reelOptional = reelRepository.findReelByNameAndPriceAndTypeIdAndManufacturerId(
+                request.getName(),
+                request.getPrice(),
+                dto.getType().getId(),
+                request.getManufacturerId());
+        if(reelOptional.isPresent() && !Objects.equals(reelOptional.get().getId(), request.getId())){
+            throw new ReelAlreadyExistsException("Such a reel is already exists");
+        }else{
+            dto.setName(request.getName());
+            dto.setPrice(request.getPrice());
+            dto.setManufacturer(manufacturerService.getById(request.getManufacturerId()));
+        }
         reelRepository.save(mapToEntity(dto));
     }
     @Override

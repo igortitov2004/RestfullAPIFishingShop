@@ -5,36 +5,45 @@ import com.example.fishingshop.DTOs.rodsCart.RodCartResponse;
 import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
 import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
 import com.example.fishingshop.services.RodsCartService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+@PreAuthorize("hasAnyRole('USER')")
 @RequestMapping("/rodsCarts")
 public class RodsCartController {
     private final RodsCartService rodsCartService;
+    @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/user/{id}")
     public ResponseEntity<List<RodCartResponse>> list(@PathVariable Long id){
        return ResponseEntity.ok(rodsCartService.listByUserId(id));
     }
+    @PreAuthorize("hasAuthority('user:create')")
     @PutMapping("/")
     public ResponseEntity<String> create(@RequestBody RodsCartCreationRequest rodsCartCreationRequest){
         rodsCartService.add(rodsCartCreationRequest);
         return ResponseEntity.ok("Товар добавлен в корзину");
     }
+    @PreAuthorize("hasAuthority('user:delete')")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> deleteByUserId(@PathVariable Long id){
         rodsCartService.deleteByUserId(id);
         return ResponseEntity.ok("Удилища c id пользователя" + id+" удалены из корзины");
     }
+    @PreAuthorize("hasAuthority('user:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         rodsCartService.deleteById(id);
         return ResponseEntity.ok("Удилище c id " + id+" удалено из корзины");
     }
+    @PreAuthorize("hasAuthority('user:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody RodCartIncreaseAmountRequest request){
         rodsCartService.increaseAmount(request);

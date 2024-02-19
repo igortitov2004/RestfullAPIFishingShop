@@ -1,6 +1,7 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.user.UserDTO;
+import com.example.fishingshop.exceptions.userExceptions.UserAlreadyExistsException;
 import com.example.fishingshop.exceptions.userExceptions.UserIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.User;
@@ -31,5 +32,13 @@ public class UserServiceImpl implements Map<UserDTO, User>, UserService {
             throw new UserIsNotExistsException("User with this id is not exists");
         }
         return userRepository.findById(id).map(this::mapToDTO).get();
+    }
+
+    @Override
+    public void create(User user) {
+        if(userRepository.existsUserByEmail(user.getEmail())){
+            throw new UserAlreadyExistsException("User with this email already exists");
+        }
+        userRepository.save(user);
     }
 }

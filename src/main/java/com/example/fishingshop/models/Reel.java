@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "reels")
 @Data
-
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reel {

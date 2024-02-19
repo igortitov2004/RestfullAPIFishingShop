@@ -1,4 +1,4 @@
-package com.example.fishingshop.DTOs;
+package com.example.fishingshop.DTOs.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +13,8 @@ import lombok.*;
 public class UserDTO {
     private Long id;
     private String email;
+
+    private String password;
     private String surname;
     private String firstName;
     private String patronymic;

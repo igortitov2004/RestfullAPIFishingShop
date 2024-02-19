@@ -1,6 +1,6 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.exceptions.userExceptions.UserIsNotExistsException;
 import com.example.fishingshop.models.User;
 import com.example.fishingshop.repositories.UserRepository;

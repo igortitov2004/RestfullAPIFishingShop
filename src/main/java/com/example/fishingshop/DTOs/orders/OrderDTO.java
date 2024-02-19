@@ -1,11 +1,6 @@
 package com.example.fishingshop.DTOs.orders;
 
-import com.example.fishingshop.DTOs.UserDTO;
-import com.example.fishingshop.models.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.fishingshop.DTOs.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

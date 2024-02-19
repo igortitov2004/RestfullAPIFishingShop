@@ -4,6 +4,7 @@ import com.example.fishingshop.DTOs.manufacturer.ManufacturerCreationRequest;
 import com.example.fishingshop.DTOs.manufacturer.ManufacturerDTO;
 import com.example.fishingshop.DTOs.reel.ReelCreationRequest;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
+import com.example.fishingshop.DTOs.reel.ReelEditRequest;
 import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlreadyExistException;
 import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
@@ -119,7 +120,6 @@ class ReelServiceImplTest {
         request.setTypeId(1L);
         request.setManufacturerId(1L);
 
-
         Mockito.when(reelRepository.existsReelByNameAndPriceAndTypeIdAndManufacturerId(
                 request.getName(),
                 request.getPrice(),
@@ -127,6 +127,95 @@ class ReelServiceImplTest {
                 request.getManufacturerId())).thenReturn(true);
 
         assertThrows(ReelAlreadyExistsException.class,()-> reelServiceImpl.add(request));
+    }
+    @Test
+    void edit_whenNotExistsById(){
+        ReelEditRequest request = ReelEditRequest.builder()
+                .id(1L)
+                .build();
+        Mockito.when(reelRepository.existsReelById(request.getId())).thenReturn(false);
+
+        assertThrows(ReelIsNotExistsException.class,()->reelServiceImpl.edit(new ReelEditRequest()));
+
+        Mockito.verify(reelRepository,Mockito.times(0)).save(any());
+    }
+    @Test
+    void edit_whenSuchReelExists(){
+       ReelEditRequest request = ReelEditRequest.builder()
+               .id(1L)
+               .name("name")
+               .price(1d)
+               .manufacturerId(1L)
+               .build();
+       ReelDTO dto = ReelDTO.builder()
+               .id(1L)
+               .name("name")
+               .price(1d)
+               .manufacturer(new ManufacturerDTO())
+               .type(new TypeOfReelDTO())
+               .build();
+       Reel reel = Reel.builder()
+               .id(1L)
+               .name("name")
+               .price(1d)
+               .manufacturer(new Manufacturer())
+               .type(new TypeOfReel())
+               .build();
+        Reel reelForOptional = Reel.builder()
+                .id(2L)
+                .name("name")
+                .price(1d)
+                .manufacturer(new Manufacturer())
+                .type(new TypeOfReel())
+                .build();
+        Mockito.when(reelRepository.existsReelById(request.getId())).thenReturn(true);
+        Mockito.when(reelRepository.findById(request.getId())).thenReturn(Optional.ofNullable(reel));
+        Mockito.when(modelMapper.map(reel,ReelDTO.class)).thenReturn(dto);
+        Mockito.when(reelRepository.findReelByNameAndPriceAndTypeIdAndManufacturerId(
+                request.getName(),
+                request.getPrice(),
+                dto.getType().getId(),
+                request.getManufacturerId())).thenReturn(Optional.ofNullable(reelForOptional));
+        assertThrows(ReelAlreadyExistsException.class,()->reelServiceImpl.edit(request));
+    }
+    @Test
+    void edit_whenSuchReelIsNotExists(){
+        ReelEditRequest request = ReelEditRequest.builder()
+                .id(1L)
+                .name("name")
+                .price(1d)
+                .manufacturerId(1L)
+                .build();
+        ReelDTO dto = ReelDTO.builder()
+                .id(1L)
+                .name("name")
+                .price(1d)
+                .manufacturer(new ManufacturerDTO())
+                .type(new TypeOfReelDTO())
+                .build();
+        Reel reel = Reel.builder()
+                .id(1L)
+                .name("name")
+                .price(1d)
+                .manufacturer(new Manufacturer())
+                .type(new TypeOfReel())
+                .build();
+        Mockito.when(reelRepository.existsReelById(request.getId())).thenReturn(true);
+        Mockito.when(reelRepository.findById(request.getId())).thenReturn(Optional.ofNullable(reel));
+        Mockito.when(modelMapper.map(reel,ReelDTO.class)).thenReturn(dto);
+        Mockito.when(reelRepository.findReelByNameAndPriceAndTypeIdAndManufacturerId(
+                request.getName(),
+                request.getPrice(),
+                dto.getType().getId(),
+                request.getManufacturerId())).thenReturn(Optional.ofNullable(reel));
+        Mockito.when(manufacturerServiceImpl.getById(1L)).thenReturn(new ManufacturerDTO());
+        Mockito.when(modelMapper.map(dto,Reel.class)).thenReturn(reel);
+
+        reelServiceImpl.edit(request);
+
+        assertNotNull(reel);
+
+        Mockito.verify(reelRepository,Mockito.times(1)).save(reel);
     }
     @Test
     void delete_whenExists(){

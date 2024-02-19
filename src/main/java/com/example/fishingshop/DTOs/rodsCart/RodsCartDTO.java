@@ -1,6 +1,6 @@
 package com.example.fishingshop.DTOs.rodsCart;
 
-import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.DTOs.rod.RodDTO;
 import lombok.Data;
 

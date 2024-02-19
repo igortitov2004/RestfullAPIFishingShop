@@ -1,17 +1,14 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
 import com.example.fishingshop.DTOs.reelsCart.ReelCartResponse;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartCreationRequest;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartDTO;
 import com.example.fishingshop.DTOs.reelsCart.ReelsCartIncreaseAmountRequest;
-import com.example.fishingshop.DTOs.rod.RodDTO;
 import com.example.fishingshop.exceptions.reelsCartExceptions.ReelsCartIsNotExistsException;
-import com.example.fishingshop.exceptions.rodExceptions.RodIsNotExistException;
 import com.example.fishingshop.models.Reel;
 import com.example.fishingshop.models.ReelsCart;
-import com.example.fishingshop.models.Rod;
 import com.example.fishingshop.models.User;
 import com.example.fishingshop.repositories.ReelsCartRepository;
 import org.junit.jupiter.api.Test;

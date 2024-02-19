@@ -1,7 +1,7 @@
 package com.example.fishingshop.DTOs.reelsCart;
 
 import com.example.fishingshop.DTOs.reel.ReelDTO;
-import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.user.UserDTO;
 import lombok.Data;
 
 @Data

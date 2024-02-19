@@ -1,17 +1,12 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.UserDTO;
+import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.DTOs.orders.OrderDTO;
 import com.example.fishingshop.DTOs.orders.OrderResponse;
-import com.example.fishingshop.DTOs.orders.ReelsForOrderResponse;
-import com.example.fishingshop.DTOs.orders.RodsForOrderResponse;
 import com.example.fishingshop.exceptions.orderExceptions.OrderIsNotExistsException;
 import com.example.fishingshop.models.Order;
 import com.example.fishingshop.models.User;
 import com.example.fishingshop.repositories.OrderRepository;
-import com.example.fishingshop.services.ReelsOrderService;
-import com.example.fishingshop.services.RodsOrderService;
-import com.example.fishingshop.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

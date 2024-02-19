@@ -3,14 +3,18 @@ package com.example.fishingshop.controllers;
 import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelCreationRequest;
 import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.services.TypeOfReelService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+@PreAuthorize("hasAnyRole('ADMIN','USER','GUEST')")
 @RequestMapping("/typeOfReels")
 public class TypeOfReelController {
     private final TypeOfReelService typeOfReelService;
@@ -18,21 +22,19 @@ public class TypeOfReelController {
     public ResponseEntity<List<TypeOfReelDTO>> list(@RequestParam(required = false) String type){
         return ResponseEntity.ok(typeOfReelService.list(type));
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<TypeOfReelDTO> typeOfReelInfo(@PathVariable Long id){
-        TypeOfReelDTO typeOfReelDTO = typeOfReelService.getById(id);
-        return ResponseEntity.ok(typeOfReelDTO);
-    }
+    @PreAuthorize("hasAnyAuthority('admin:create')")
     @PutMapping("/")
     public ResponseEntity<String> create(@RequestBody TypeOfReelCreationRequest request){
        typeOfReelService.add(request);
         return ResponseEntity.ok("Создан тип катушки " + request.getType());
     }
+    @PreAuthorize("hasAnyAuthority('admin:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         typeOfReelService.delete(id);
         return ResponseEntity.ok("Удален тип катушки c id " + id);
     }
+    @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody TypeOfReelDTO typeOfReelDTO){
         typeOfReelService.edit(typeOfReelDTO);
