@@ -1,4 +1,4 @@
-package com.example.fishingshop.DTOs.rodsCart;
+package com.example.fishingshop.DTOs.carts.rodsCart;
 
 import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.DTOs.rod.RodDTO;

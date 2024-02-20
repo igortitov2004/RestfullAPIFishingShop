@@ -1,6 +1,6 @@
-package com.example.fishingshop.DTOs.rodsCart;
+package com.example.fishingshop.DTOs.carts.reelsCart;
 
-import com.example.fishingshop.DTOs.rod.RodDTO;
+import com.example.fishingshop.DTOs.reel.ReelDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RodCartResponse {
+public class ReelForCartResponse {
     private Long id;
-    private RodDTO rod;
+    private ReelDTO reel;
     private Integer amount;
 }

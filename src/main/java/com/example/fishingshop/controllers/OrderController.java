@@ -3,17 +3,21 @@ package com.example.fishingshop.controllers;
 import com.example.fishingshop.DTOs.orders.OrderRequest;
 import com.example.fishingshop.DTOs.orders.OrderResponse;
 import com.example.fishingshop.models.Order;
+import com.example.fishingshop.models.User;
 import com.example.fishingshop.services.OrderService;
 import com.example.fishingshop.services.ReelsOrderService;
 import com.example.fishingshop.services.RodsOrderService;
+import com.example.fishingshop.services.servicesImpl.OrderServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,22 +28,28 @@ import java.util.List;
 public class OrderController{
     private final OrderService orderService;
 
+
     @PreAuthorize("hasAuthority('user:read')")
-    @GetMapping("/{id}")
-    public ResponseEntity<List<OrderResponse>> list(@PathVariable Long id){
-        List<OrderResponse> orderResponselist = orderService.list(id);
+    @GetMapping("/")
+    public ResponseEntity<List<OrderResponse>> list(Principal principal){
+        User user = getCurrentUser(principal);
+        List<OrderResponse> orderResponselist = orderService.list(user.getId());
         return ResponseEntity.ok(orderResponselist);
     }
     @PreAuthorize("hasAuthority('user:create')")
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody OrderRequest orderRequest){
-        Order order = orderService.add(orderRequest.getAddress());
-        return ResponseEntity.ok("Заказ оформлен : дата и время "+order.getLocalDateTime());
+    public ResponseEntity<String> create(@RequestBody OrderRequest orderRequest, Principal principal){
+        User user = getCurrentUser(principal);
+        Order order = orderService.add(orderRequest.getAddress(),user);
+        return ResponseEntity.ok("Заказ оформлен : дата и время " + order.getLocalDateTime());
     }
     @PreAuthorize("hasAuthority('user:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         orderService.deleteById(id);
-        return ResponseEntity.ok("Удален заказ с id "+id);
+        return ResponseEntity.ok("Удален заказ с id " + id);
+    }
+    private User getCurrentUser(Principal principal){
+        return (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
     }
 }

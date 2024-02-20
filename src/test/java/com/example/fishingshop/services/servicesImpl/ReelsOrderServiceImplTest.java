@@ -3,14 +3,12 @@ package com.example.fishingshop.services.servicesImpl;
 import com.example.fishingshop.DTOs.orders.ReelsForOrderResponse;
 import com.example.fishingshop.DTOs.orders.ReelsOrderDTO;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
-import com.example.fishingshop.DTOs.reelsCart.ReelCartResponse;
-import com.example.fishingshop.exceptions.reelsCartExceptions.ReelsCartIsNotExistsException;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelForCartResponse;
 import com.example.fishingshop.models.Order;
 import com.example.fishingshop.models.Reel;
 import com.example.fishingshop.models.ReelsOrder;
 import com.example.fishingshop.models.User;
 import com.example.fishingshop.repositories.ReelsOrderRepository;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,8 +34,8 @@ class ReelsOrderServiceImplTest {
     @Test
     void listByOrderId() {
         List<ReelsForOrderResponse> expected = new ArrayList<>();
-        expected.add( ReelsForOrderResponse.builder()
-                .reelDTO(new ReelDTO())
+        expected.add(ReelsForOrderResponse.builder()
+                .reel(new ReelDTO())
                 .amount(1)
                 .build());
         ReelsOrder reelsOrder = ReelsOrder.builder()
@@ -60,9 +58,12 @@ class ReelsOrderServiceImplTest {
                         .id(1L)
                         .build())
                 .build();
-        ReelCartResponse response = ReelCartResponse.builder()
-                .reel(new ReelDTO())
-                .amount(1)
+        ReelDTO reelDTO = ReelDTO.builder()
+                .price(1d)
+                .build();
+        ReelForCartResponse response = ReelForCartResponse.builder()
+                .reel(reelDTO)
+                .amount(3)
                 .build();
         ReelsOrderDTO dto = ReelsOrderDTO.builder()
                 .reel(response.getReel())
@@ -71,13 +72,16 @@ class ReelsOrderServiceImplTest {
         ReelsOrder reelsOrder = ReelsOrder.builder()
                 .order(order)
                 .reel(new Reel())
-                .amount(1)
+                .amount(3)
                 .build();
+        Double expected = 3d;
 
         Mockito.when(modelMapper.map(dto, ReelsOrder.class)).thenReturn(reelsOrder);
         Mockito.when(reelsCartServiceImpl.listByUserId(order.getUser().getId())).thenReturn(List.of(response));
 
-        reelsOrderServiceImpl.add(order);
+        Double actual = reelsOrderServiceImpl.add(order);
+
+        assertEquals(expected,actual);
 
         Mockito.verify(reelsOrderRepository,Mockito.times(1)).save(reelsOrder);
         Mockito.verify(reelsCartServiceImpl,Mockito.times(1)).deleteByUserId(order.getUser().getId());

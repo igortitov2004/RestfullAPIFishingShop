@@ -14,4 +14,5 @@ import java.util.List;
 public class OrderResponse {
     List<ReelsForOrderResponse> reelsForOrderResponseList;
     List<RodsForOrderResponse> rodsForOrderResponseList;
+    Double totalPrice;
 }

@@ -1,15 +1,11 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.orders.ReelsForOrderResponse;
-import com.example.fishingshop.DTOs.orders.ReelsOrderDTO;
 import com.example.fishingshop.DTOs.orders.RodsForOrderResponse;
 import com.example.fishingshop.DTOs.orders.RodsOrderDTO;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
-import com.example.fishingshop.DTOs.reelsCart.ReelCartResponse;
 import com.example.fishingshop.DTOs.rod.RodDTO;
-import com.example.fishingshop.DTOs.rodsCart.RodCartResponse;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodForCartResponse;
 import com.example.fishingshop.models.*;
-import com.example.fishingshop.repositories.ReelsOrderRepository;
 import com.example.fishingshop.repositories.RodsOrderRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -38,7 +34,7 @@ class RodsOrderServiceImplTest {
     void listByOrderId() {
         List<RodsForOrderResponse> expected = new ArrayList<>();
         expected.add(RodsForOrderResponse.builder()
-                .rodDTO(new RodDTO())
+                .rod(new RodDTO())
                 .amount(1)
                 .build());
         RodsOrder rodsOrder = RodsOrder.builder()
@@ -55,15 +51,19 @@ class RodsOrderServiceImplTest {
     }
     @Test
     void add(){
+        //todo
+        RodDTO rodDTO = RodDTO.builder()
+                .price(1d)
+                .build();
         Order order = Order.builder()
                 .address("address")
                 .user(User.builder()
                         .id(1L)
                         .build())
                 .build();
-        RodCartResponse response = RodCartResponse.builder()
-                .rod(new RodDTO())
-                .amount(1)
+        RodForCartResponse response = RodForCartResponse.builder()
+                .rod(rodDTO)
+                .amount(3)
                 .build();
         RodsOrderDTO dto = RodsOrderDTO.builder()
                 .rod(response.getRod())
@@ -72,13 +72,15 @@ class RodsOrderServiceImplTest {
         RodsOrder rodsOrder = RodsOrder.builder()
                 .order(order)
                 .rod(new Rod())
-                .amount(1)
+                .amount(3)
                 .build();
-
+        Double expected = 3d;
         Mockito.when(modelMapper.map(dto, RodsOrder.class)).thenReturn(rodsOrder);
         Mockito.when(reelsCartServiceImpl.listByUserId(order.getUser().getId())).thenReturn(List.of(response));
 
-        reelsOrderServiceImpl.add(order);
+        Double actual = reelsOrderServiceImpl.add(order);
+
+        assertEquals(expected,actual);
 
         Mockito.verify(reelsOrderRepository,Mockito.times(1)).save(rodsOrder);
         Mockito.verify(reelsCartServiceImpl,Mockito.times(1)).deleteByUserId(order.getUser().getId());

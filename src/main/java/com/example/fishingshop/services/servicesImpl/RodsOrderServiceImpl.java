@@ -3,22 +3,17 @@ package com.example.fishingshop.services.servicesImpl;
 
 import com.example.fishingshop.DTOs.orders.RodsForOrderResponse;
 import com.example.fishingshop.DTOs.orders.RodsOrderDTO;
-import com.example.fishingshop.DTOs.rodsCart.RodCartResponse;
-import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
-import com.example.fishingshop.exceptions.rodsOrderExceptions.RodsOrderIsNotExistsException;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodForCartResponse;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Order;
 import com.example.fishingshop.models.RodsOrder;
 import com.example.fishingshop.repositories.RodsOrderRepository;
-import com.example.fishingshop.services.RodService;
 import com.example.fishingshop.services.RodsCartService;
 import com.example.fishingshop.services.RodsOrderService;
-import com.example.fishingshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,16 +30,19 @@ public class RodsOrderServiceImpl implements Map<RodsOrderDTO, RodsOrder>, RodsO
                 .toList();
     }
     @Override
-    public void add(Order order) {
-        for(RodCartResponse response:rodsCartService.listByUserId(order.getUser().getId())) {
+    public Double add(Order order) {
+        double totalRodsPrice=0d;
+        for(RodForCartResponse response:rodsCartService.listByUserId(order.getUser().getId())) {
             RodsOrderDTO rodsOrderDTO = new RodsOrderDTO();
             rodsOrderDTO.setRod(response.getRod());
             rodsOrderDTO.setAmount(response.getAmount());
+            totalRodsPrice+=response.getRod().getPrice()*response.getAmount().doubleValue();
             RodsOrder rodsOrder = mapToEntity(rodsOrderDTO);
             rodsOrder.setOrder(order);
             rodsOrderRepository.save(rodsOrder);
         }
         rodsCartService.deleteByUserId(order.getUser().getId());
+        return totalRodsPrice;
     }
     @Override
     public RodsOrderDTO mapToDTO(RodsOrder entity) {

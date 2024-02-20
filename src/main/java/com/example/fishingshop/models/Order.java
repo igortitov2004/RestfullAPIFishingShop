@@ -31,6 +31,9 @@ public class Order {
     private String localDateTime;
     @Column(name = "address")
     private String address;
+
+    @Column(name = "totalPrice")
+    private Double totalPrice;
     @OneToMany(mappedBy = "order",cascade = CascadeType.REMOVE)
     private List<ReelsOrder> reelsOrders;
     @OneToMany(mappedBy = "order",cascade = CascadeType.REMOVE)

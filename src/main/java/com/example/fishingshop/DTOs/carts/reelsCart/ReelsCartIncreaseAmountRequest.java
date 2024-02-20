@@ -1,4 +1,4 @@
-package com.example.fishingshop.DTOs.reelsCart;
+package com.example.fishingshop.DTOs.carts.reelsCart;
 
 import lombok.Data;
 

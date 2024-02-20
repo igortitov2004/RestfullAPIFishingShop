@@ -1,15 +1,12 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.reelsCart.ReelCartResponse;
-import com.example.fishingshop.DTOs.reelsCart.ReelsCartDTO;
-import com.example.fishingshop.DTOs.reelsCart.ReelsCartCreationRequest;
-import com.example.fishingshop.DTOs.reelsCart.ReelsCartIncreaseAmountRequest;
-import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
-import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelForCartResponse;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartDTO;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartCreationRequest;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartIncreaseAmountRequest;
 import com.example.fishingshop.exceptions.reelsCartExceptions.ReelsCartIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.ReelsCart;
-import com.example.fishingshop.models.RodsCart;
 import com.example.fishingshop.repositories.ReelsCartRepository;
 import com.example.fishingshop.services.ReelService;
 import com.example.fishingshop.services.ReelsCartService;
@@ -31,13 +28,14 @@ public class ReelsCartServiceImpl implements Map<ReelsCartDTO, ReelsCart>,ReelsC
     private final ReelService reelService;
     private final UserService userService;
     @Override
-    public List<ReelCartResponse> listByUserId(Long id) {
+    public List<ReelForCartResponse> listByUserId(Long id) {
         if(!reelsCartRepository.existsReelsCartByUserId(id)){
             throw new ReelsCartIsNotExistsException("Reels cart with this user id is not exists");
         }
         return reelsCartRepository.findByUserId(id)
                 .stream().map(this::mapToResponse).toList();
     }
+
     @Override
     public void deleteById(Long id) {
         if(!reelsCartRepository.existsReelsCartById(id)){
@@ -55,18 +53,20 @@ public class ReelsCartServiceImpl implements Map<ReelsCartDTO, ReelsCart>,ReelsC
         reelsCartRepository.deleteAllByUserId(id);
     }
     @Override
-    public void add(ReelsCartCreationRequest request){
-        Optional<ReelsCart> reelsCartOptional = reelCartByUserIdAndReelId(request.getUserId(),request.getReelId());
+    public void add(ReelsCartCreationRequest request, Long userId){
+        Optional<ReelsCart> reelsCartOptional = reelCartByUserIdAndReelId(userId,request.getReelId());
         if(reelsCartOptional.isPresent()){
             addExistingReelsCart(reelsCartOptional);
         }else{
-            addNewReelsCart(request);
+            addNewReelsCart(request,userId);
         }
     }
-    private void addNewReelsCart(ReelsCartCreationRequest request){
+
+
+    private void addNewReelsCart(ReelsCartCreationRequest request,Long userId){
         ReelsCartDTO reelsCartDTO = new ReelsCartDTO();
         reelsCartDTO.setReel(reelService.getById(request.getReelId()));
-        reelsCartDTO.setUser(userService.getById(request.getUserId()));
+        reelsCartDTO.setUser(userService.getById(userId));
         reelsCartDTO.setAmount(1);
         reelsCartRepository.save(mapToEntity(reelsCartDTO));
     }
@@ -103,8 +103,8 @@ public class ReelsCartServiceImpl implements Map<ReelsCartDTO, ReelsCart>,ReelsC
     public ReelsCart mapToEntity(ReelsCartDTO dto) {
         return modelMapper.map(dto, ReelsCart.class);
     }
-    private ReelCartResponse mapToResponse(ReelsCart entity){
-        return modelMapper.map(entity,ReelCartResponse.class);
+    private ReelForCartResponse mapToResponse(ReelsCart entity){
+        return modelMapper.map(entity, ReelForCartResponse.class);
     }
 }
 

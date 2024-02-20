@@ -15,7 +15,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorMessage> handle(Exception ex){
         ErrorMessage errorMessage = new ErrorMessage(ex.getMessage());
         if(ex instanceof UsernameNotFoundException){
-            errorMessage.setMessage("custom: Username not found ");
+            errorMessage.setMessage("custom: Username not found");
         }
         if(ex instanceof BadCredentialsException){
             errorMessage.setMessage("custom: Bad credentials");

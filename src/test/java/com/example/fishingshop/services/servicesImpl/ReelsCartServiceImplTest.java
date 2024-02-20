@@ -2,10 +2,10 @@ package com.example.fishingshop.services.servicesImpl;
 
 import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
-import com.example.fishingshop.DTOs.reelsCart.ReelCartResponse;
-import com.example.fishingshop.DTOs.reelsCart.ReelsCartCreationRequest;
-import com.example.fishingshop.DTOs.reelsCart.ReelsCartDTO;
-import com.example.fishingshop.DTOs.reelsCart.ReelsCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelForCartResponse;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartCreationRequest;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartDTO;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartIncreaseAmountRequest;
 import com.example.fishingshop.exceptions.reelsCartExceptions.ReelsCartIsNotExistsException;
 import com.example.fishingshop.models.Reel;
 import com.example.fishingshop.models.ReelsCart;
@@ -48,17 +48,17 @@ class ReelsCartServiceImplTest {
         List<ReelsCart> reelsCartList = new ArrayList<>(List.of(
                 new ReelsCart(1L,null,null,1)
         ));
-        ReelCartResponse reelCartResponse = new ReelCartResponse();
-        reelCartResponse.setId(1L);
-        reelCartResponse.setReel(null);
-        reelCartResponse.setAmount(1);
-        List<ReelCartResponse> expected = new ArrayList<>(List.of(reelCartResponse));
+        ReelForCartResponse reelForCartResponse = new ReelForCartResponse();
+        reelForCartResponse.setId(1L);
+        reelForCartResponse.setReel(null);
+        reelForCartResponse.setAmount(1);
+        List<ReelForCartResponse> expected = new ArrayList<>(List.of(reelForCartResponse));
 
         Mockito.when(reelsCartRepository.existsReelsCartByUserId(2L)).thenReturn(true);
-        Mockito.when(modelMapper.map(reelsCartList.get(0),ReelCartResponse.class)).thenReturn(reelCartResponse);
+        Mockito.when(modelMapper.map(reelsCartList.get(0), ReelForCartResponse.class)).thenReturn(reelForCartResponse);
         Mockito.when(reelsCartRepository.findByUserId(2L)).thenReturn(reelsCartList);
 
-        List<ReelCartResponse> actual = reelsCartServiceImpl.listByUserId(2L);
+        List<ReelForCartResponse> actual = reelsCartServiceImpl.listByUserId(2L);
 
         assertEquals(expected,actual);
     }
@@ -96,9 +96,11 @@ class ReelsCartServiceImplTest {
     }
     @Test
     void add_new(){
+        User user = User.builder()
+                .id(1L).build();
         ReelsCartCreationRequest request = new ReelsCartCreationRequest();
         request.setReelId(1L);
-        request.setUserId(1L);
+
 
         ReelsCartDTO reelsCartDTO = new ReelsCartDTO();
         reelsCartDTO.setReel(new ReelDTO());
@@ -110,19 +112,20 @@ class ReelsCartServiceImplTest {
         reelsCart.setUser(new User());
         reelsCart.setReel(new Reel());
 
-        Mockito.when(reelsCartRepository.findReelsCartByUserIdAndReelId(request.getUserId(),request.getReelId())).thenReturn(Optional.empty());
+        Mockito.when(reelsCartRepository.findReelsCartByUserIdAndReelId(user.getId(),request.getReelId())).thenReturn(Optional.empty());
         Mockito.when(reelServiceImpl.getById(request.getReelId())).thenReturn(new ReelDTO());
-        Mockito.when(userServiceImpl.getById(request.getUserId())).thenReturn(new UserDTO());
+        Mockito.when(userServiceImpl.getById(user.getId())).thenReturn(new UserDTO());
         Mockito.when(modelMapper.map(reelsCartDTO,ReelsCart.class)).thenReturn(reelsCart);
 
-        reelsCartServiceImpl.add(request);
+        reelsCartServiceImpl.add(request,user.getId());
 
         Mockito.verify(reelsCartRepository,Mockito.times(1)).save(reelsCart);
     }
     @Test
     void add_existing(){
+        User user = User.builder()
+                .id(1L).build();
          ReelsCartCreationRequest request = new ReelsCartCreationRequest();
-         request.setUserId(1L);
          request.setReelId(1L);
 
          Optional<ReelsCart> reelsCartOptional = Optional.of(new ReelsCart());
@@ -131,9 +134,9 @@ class ReelsCartServiceImplTest {
          ReelsCart reelsCart = new ReelsCart();
          reelsCart.setAmount(2);
 
-         Mockito.when(reelsCartRepository.findReelsCartByUserIdAndReelId(request.getUserId(),request.getReelId())).thenReturn(reelsCartOptional);
+         Mockito.when(reelsCartRepository.findReelsCartByUserIdAndReelId(user.getId(),request.getReelId())).thenReturn(reelsCartOptional);
 
-         reelsCartServiceImpl.add(request);
+         reelsCartServiceImpl.add(request,user.getId());
 
          Mockito.verify(reelsCartRepository,Mockito.times(1)).save(reelsCart);
     }

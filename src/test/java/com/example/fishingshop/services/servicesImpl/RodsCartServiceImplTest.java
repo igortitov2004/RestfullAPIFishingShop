@@ -2,10 +2,10 @@ package com.example.fishingshop.services.servicesImpl;
 
 import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.DTOs.rod.RodDTO;
-import com.example.fishingshop.DTOs.rodsCart.RodCartIncreaseAmountRequest;
-import com.example.fishingshop.DTOs.rodsCart.RodCartResponse;
-import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
-import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodForCartResponse;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartCreationRequest;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartDTO;
 import com.example.fishingshop.exceptions.rodsCartExceptions.RodsCartIsNotExistsException;
 import com.example.fishingshop.models.*;
 import com.example.fishingshop.repositories.RodsCartRepository;
@@ -47,17 +47,17 @@ class RodsCartServiceImplTest {
         List<RodsCart> rodsCartList = new ArrayList<>(List.of(
                 new RodsCart(1L,null,null,1)
         ));
-        RodCartResponse rodCartResponse = new RodCartResponse();
-        rodCartResponse.setId(1L);
-        rodCartResponse.setRod(null);
-        rodCartResponse.setAmount(1);
-        List<RodCartResponse> expected = new ArrayList<>(List.of(rodCartResponse));
+        RodForCartResponse rodForCartResponse = new RodForCartResponse();
+        rodForCartResponse.setId(1L);
+        rodForCartResponse.setRod(null);
+        rodForCartResponse.setAmount(1);
+        List<RodForCartResponse> expected = new ArrayList<>(List.of(rodForCartResponse));
 
         Mockito.when(rodsCartRepository.existsRodsCartByUserId(2L)).thenReturn(true);
-        Mockito.when(modelMapper.map(rodsCartList.get(0),RodCartResponse.class)).thenReturn(rodCartResponse);
+        Mockito.when(modelMapper.map(rodsCartList.get(0), RodForCartResponse.class)).thenReturn(rodForCartResponse);
         Mockito.when(rodsCartRepository.findByUserId(2L)).thenReturn(rodsCartList);
 
-        List<RodCartResponse> actual = rodsCartServiceImpl.listByUserId(2L);
+        List<RodForCartResponse> actual = rodsCartServiceImpl.listByUserId(2L);
 
         assertEquals(expected,actual);
     }
@@ -93,11 +93,15 @@ class RodsCartServiceImplTest {
 
         Mockito.verify(rodsCartRepository,Mockito.times(0)).deleteAllByUserId(1L);
     }
+
     @Test
     void add_new(){
+        User user = User.builder()
+                .id(1L).build();
+
         RodsCartCreationRequest request = new RodsCartCreationRequest();
         request.setRodId(1L);
-        request.setUserId(1L);
+
 
         RodsCartDTO rodsCartDTO = new RodsCartDTO();
         rodsCartDTO.setRod(new RodDTO());
@@ -109,19 +113,21 @@ class RodsCartServiceImplTest {
         rodsCart.setUser(new User());
         rodsCart.setRod(new Rod());
 
-        Mockito.when(rodsCartRepository.findRodsCartByUserIdAndRodId(request.getUserId(),request.getRodId())).thenReturn(Optional.empty());
+        Mockito.when(rodsCartRepository.findRodsCartByUserIdAndRodId(user.getId(),request.getRodId())).thenReturn(Optional.empty());
         Mockito.when(rodServiceImpl.getById(request.getRodId())).thenReturn(new RodDTO());
-        Mockito.when(userServiceImpl.getById(request.getUserId())).thenReturn(new UserDTO());
+        Mockito.when(userServiceImpl.getById(user.getId())).thenReturn(new UserDTO());
         Mockito.when(modelMapper.map(rodsCartDTO,RodsCart.class)).thenReturn(rodsCart);
 
-        rodsCartServiceImpl.add(request);
+        rodsCartServiceImpl.add(request, user.getId());
 
         Mockito.verify(rodsCartRepository,Mockito.times(1)).save(rodsCart);
     }
+
     @Test
     void add_existing(){
+        User user = User.builder()
+                .id(1L).build();
         RodsCartCreationRequest request = new RodsCartCreationRequest();
-        request.setUserId(1L);
         request.setRodId(1L);
 
         Optional<RodsCart> rodsCartOptional = Optional.of(new RodsCart());
@@ -130,9 +136,9 @@ class RodsCartServiceImplTest {
         RodsCart rodsCart = new RodsCart();
         rodsCart.setAmount(2);
 
-        Mockito.when(rodsCartRepository.findRodsCartByUserIdAndRodId(request.getUserId(),request.getRodId())).thenReturn(rodsCartOptional);
+        Mockito.when(rodsCartRepository.findRodsCartByUserIdAndRodId(user.getId(),request.getRodId())).thenReturn(rodsCartOptional);
 
-        rodsCartServiceImpl.add(request);
+        rodsCartServiceImpl.add(request, user.getId());
 
         Mockito.verify(rodsCartRepository,Mockito.times(1)).save(rodsCart);
     }

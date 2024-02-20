@@ -10,5 +10,5 @@ public interface RodsOrderService {
 
     List<RodsForOrderResponse> listByOrderId(Long id);
 
-    void add(Order order);
+    Double add(Order order);
 }

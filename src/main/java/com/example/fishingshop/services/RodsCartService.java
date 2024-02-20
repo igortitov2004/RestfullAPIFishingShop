@@ -1,22 +1,24 @@
 package com.example.fishingshop.services;
 
-import com.example.fishingshop.DTOs.rodsCart.RodCartIncreaseAmountRequest;
-import com.example.fishingshop.DTOs.rodsCart.RodCartResponse;
-import com.example.fishingshop.DTOs.rodsCart.RodsCartDTO;
-import com.example.fishingshop.DTOs.rodsCart.RodsCartCreationRequest;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodForCartResponse;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartDTO;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartCreationRequest;
 import com.example.fishingshop.models.RodsCart;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface RodsCartService {
-    List<RodCartResponse> listByUserId(Long id);
+    List<RodForCartResponse> listByUserId(Long id);
     void deleteById(Long id);
     void deleteByUserId(Long id);
-    void add(RodsCartCreationRequest request);
+
+
+    void add(RodsCartCreationRequest request, Long userId);
 
     void increaseAmount(RodCartIncreaseAmountRequest request);
     RodsCartDTO getById(Long id);
 
-    Optional<RodsCart> reelCartByUserIdAndRodId(Long userId, Long rodId);
+    Optional<RodsCart> rodsCartByUserIdAndRodId(Long userId, Long rodId);
 }

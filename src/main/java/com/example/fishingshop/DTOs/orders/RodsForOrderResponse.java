@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RodsForOrderResponse {
-   private RodDTO rodDTO;
+   private RodDTO rod;
    private Integer amount;
 }

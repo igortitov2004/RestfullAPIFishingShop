@@ -16,10 +16,4 @@ public class ExcepHandler{
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessage(ex.getMessage()));
     }
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handleUsernameNotFoundException(UsernameNotFoundException ex){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorMessage(ex.getMessage()));
-    }
 }

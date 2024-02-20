@@ -10,6 +10,7 @@ import com.example.fishingshop.models.User;
 import com.example.fishingshop.repositories.OrderRepository;
 import com.example.fishingshop.repositories.UserRepository;
 import com.example.fishingshop.services.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -27,19 +28,25 @@ public class OrderServiceImpl implements Map<OrderDTO,Order>,OrderService {
     private final RodsOrderService rodsOrderService;
     private final UserService userService;
 
+    @Transactional
     @Override
-    public Order add(String address) {
+    public Order add(String address,User user) {
         Order order = new Order();
         order.setAddress(address);
-        order.setUser(modelMapper.map(userService.getById(2L), User.class));
+        order.setUser(modelMapper.map(userService.getById(user.getId()), User.class));
         order=orderRepository.save(order);
-        reelsOrderService.add(order);
-        rodsOrderService.add(order);
+        Double totalReelsPrice = reelsOrderService.add(order);
+        Double totalRodsPrice = rodsOrderService.add(order);
+        order.setTotalPrice(totalReelsPrice+totalRodsPrice);
+        orderRepository.save(order);
         return order;
     }
 
+
+
+
     @Override
-    public List<OrderResponse> list(Long userId) {
+    public List<OrderResponse> list(Long userId){
         if(!orderRepository.existsOrderByUserId(userId)){
             throw new OrderIsNotExistsException("Order with this user id is not exists");
         }
@@ -52,6 +59,7 @@ public class OrderServiceImpl implements Map<OrderDTO,Order>,OrderService {
             OrderResponse orderResponse = new OrderResponse();
             orderResponse.setReelsForOrderResponseList(reelsOrderService.listByOrderId(orderDTO.getId()));
             orderResponse.setRodsForOrderResponseList(rodsOrderService.listByOrderId(orderDTO.getId()));
+            orderResponse.setTotalPrice(orderDTO.getTotalPrice());
             orderResponseList.add(orderResponse);
         }
         return orderResponseList;

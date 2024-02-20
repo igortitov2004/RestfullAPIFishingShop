@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReelsForOrderResponse {
-    private ReelDTO reelDTO;
+    private ReelDTO reel;
     private Integer amount;
 }

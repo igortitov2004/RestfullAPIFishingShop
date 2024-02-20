@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ReelsOrderService {
     List<ReelsForOrderResponse> listByOrderId(Long id);
-    void add( Order order);
+    Double add( Order order);
 
 }

@@ -50,10 +50,10 @@ class OrderServiceImplTest {
                 .build();
 
         Mockito.when(modelMapper.map(userDTO,User.class)).thenReturn(user);
-        Mockito.when(userServiceImpl.getById(2L)).thenReturn(userDTO);
+        Mockito.when(userServiceImpl.getById(user.getId())).thenReturn(userDTO);
         Mockito.when(orderRepository.save(order)).thenReturn(order);
 
-        Order actual = orderServiceImpl.add(address);
+        Order actual = orderServiceImpl.add(address,user);
 
         assertNotNull(actual);
 
