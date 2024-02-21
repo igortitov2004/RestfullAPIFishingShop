@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-@PreAuthorize("hasAnyRole('ADMIN','USER','GUEST')")
 @RequestMapping("/typeOfReels")
 public class TypeOfReelController {
     private final TypeOfReelService typeOfReelService;
@@ -23,22 +22,22 @@ public class TypeOfReelController {
         return ResponseEntity.ok(typeOfReelService.list(type));
     }
     @PreAuthorize("hasAnyAuthority('admin:create')")
-    @PutMapping("/")
+    @PostMapping("/")
     public ResponseEntity<String> create(@RequestBody TypeOfReelCreationRequest request){
        typeOfReelService.add(request);
-        return ResponseEntity.ok("Создан тип катушки " + request.getType());
+        return ResponseEntity.ok("Type with name " + request.getType() + " was created");
     }
     @PreAuthorize("hasAnyAuthority('admin:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         typeOfReelService.delete(id);
-        return ResponseEntity.ok("Удален тип катушки c id " + id);
+        return ResponseEntity.ok("Type of reel with id " + id + " was deleted");
     }
     @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody TypeOfReelDTO typeOfReelDTO){
         typeOfReelService.edit(typeOfReelDTO);
-        return ResponseEntity.ok("Обновлены данные типа катушки с id " + typeOfReelDTO.getId());
+        return ResponseEntity.ok("Type with id " + typeOfReelDTO.getId() + " was updated");
     }
 
 

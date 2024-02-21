@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import static com.example.fishingshop.enums.Permission.*;
 
 @RequiredArgsConstructor
-public enum Role  {
+public enum Role{
     ADMIN(
             Set.of(
             ADMIN_READ,

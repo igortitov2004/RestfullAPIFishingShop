@@ -9,6 +9,7 @@ import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.TypeOfRod;
 import com.example.fishingshop.repositories.TypeOfRodRepository;
 import com.example.fishingshop.services.TypeOfRodService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class TypeOfRodServiceImpl implements Map<TypeOfRodDTO, TypeOfRod>, TypeO
         }
         typeOfRodRepository.deleteById(id);
     }
+    @Transactional
     @Override
     public void edit(TypeOfRodDTO dto) {
         if(!typeOfRodRepository.existsTypeOfRodById(dto.getId())){

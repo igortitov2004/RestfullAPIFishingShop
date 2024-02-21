@@ -21,22 +21,22 @@ public class TypeOfRodController {
     public ResponseEntity<List<TypeOfRodDTO>> list(@RequestParam(required = false) String type){
         return ResponseEntity.ok(typeOfRodService.list(type));
     }
-    @PreAuthorize("hasAnyAuthority('admin:create')")
-    @PutMapping("/")
+    @PreAuthorize("hasAuthority('admin:create')")
+    @PostMapping("/")
     public ResponseEntity<String> create(@RequestBody TypeOfRodCreationRequest request){
         typeOfRodService.add(request);
-        return ResponseEntity.ok("Создан тип удилища " + request.getType());
+        return ResponseEntity.ok("Type with name " + request.getType() + " was created");
     }
     @PreAuthorize("hasAnyAuthority('admin:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         typeOfRodService.delete(id);
-        return ResponseEntity.ok("Удален тип удилища c id " + id);
+        return ResponseEntity.ok("Type of rod with id " + id + " was deleted");
     }
-    @PreAuthorize("hasAnyAuthority('admin:delete')")
+    @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody TypeOfRodDTO typeOfRodDTO){
         typeOfRodService.edit(typeOfRodDTO);
-        return ResponseEntity.ok("Обновлены данные типа удилища с id " + typeOfRodDTO.getId());
+        return ResponseEntity.ok("Type with id " + typeOfRodDTO.getId() + " was updated");
     }
 }
