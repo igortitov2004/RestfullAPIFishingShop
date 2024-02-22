@@ -43,7 +43,9 @@ public class SecurityConfiguration {
                                 "/v3/**",
                                 "/swagger-ui/**",
                                 "/reels/",
+                                "/reels/{id}",
                                 "/rods/",
+                                "/rods/{id}",
                                 "/manufacturers/",
                                 "/typeOfReels/",
                                 "/typesOfRods/")

@@ -24,36 +24,36 @@ import java.util.List;
 public class ReelsCartController {
     private final ReelsCartService reelsCartService;
     @PreAuthorize("hasAuthority('user:read')")
-    @GetMapping("/user")
+    @GetMapping("/")
     public ResponseEntity<List<ReelForCartResponse>> list(Principal principal){
         Long userId = getCurrentUserId(principal);
         return ResponseEntity.ok(reelsCartService.listByUserId(userId));
     }
     @PreAuthorize("hasAuthority('user:create')")
-    @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody ReelsCartCreationRequest reelsCartCreationRequest, Principal principal){
+    @PostMapping("/")
+    public ResponseEntity<String> create(@RequestBody ReelsCartCreationRequest request, Principal principal){
         Long userId = getCurrentUserId(principal);
-        reelsCartService.add(reelsCartCreationRequest,userId);
-        return ResponseEntity.ok("Товар добавлен в корзину");
+        reelsCartService.add(request,userId);
+        return ResponseEntity.ok("Reel with id "+request.getReelId()+" added to cart");
     }
     @PreAuthorize("hasAuthority('user:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         reelsCartService.deleteById(id);
-        return ResponseEntity.ok("Катушка c id " + id +" удалена из корзины");
+        return ResponseEntity.ok("Reels cart with id " + id +" deleted from cart");
     }
     @PreAuthorize("hasAuthority('user:delete')")
     @DeleteMapping("/user")
     public ResponseEntity<String> deleteByUserId(Principal principal){
         Long userId = getCurrentUserId(principal);
         reelsCartService.deleteByUserId(userId);
-        return ResponseEntity.ok("Катушки c id пользователя " + userId + " удалены из корзины");
+        return ResponseEntity.ok("Reels cart(s) with user id " + userId +" deleted from cart");
     }
     @PreAuthorize("hasAuthority('user:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody ReelsCartIncreaseAmountRequest request){
         reelsCartService.increaseAmount(request);
-        return ResponseEntity.ok("Обновлены данные катушки с id " + request.getId());
+        return ResponseEntity.ok("Data of reel with id " + request.getId() + " was updated");
     }
     private Long getCurrentUserId(Principal principal){
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();

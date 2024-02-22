@@ -23,21 +23,21 @@ public class ManufacturerController {
         return ResponseEntity.ok(manufacturerService.list(name));
     }
     @PreAuthorize("hasAuthority('admin:create')")
-    @PutMapping("/")
+    @PostMapping("/")
     public ResponseEntity<String> create(@RequestBody ManufacturerCreationRequest request){
         manufacturerService.add(request);
-        return ResponseEntity.ok("Создан производитель " + request.getName());
+        return ResponseEntity.ok("Manufacturer " + request.getName() + " was created");
     }
     @PreAuthorize("hasAuthority('admin:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         manufacturerService.delete(id);
-        return ResponseEntity.ok("Удален производитель c id " + id);
+        return ResponseEntity.ok("Manufacturer with id " + id + " was deleted");
     }
     @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody ManufacturerDTO manufacturerDTO){
         manufacturerService.edit(manufacturerDTO);
-        return ResponseEntity.ok("Обновлены данные производителя с id " + manufacturerDTO.getId());
+        return ResponseEntity.ok("Manufacturer with id " + manufacturerDTO.getId() + " was updated");
     }
 }

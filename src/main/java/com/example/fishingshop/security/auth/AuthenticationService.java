@@ -32,7 +32,6 @@ public class AuthenticationService {
                 .build();
         userService.create(user);
         var jwtToken = jwtService.generateToken(user);
-        //todo: valid reg + reg success message to email, mess return(NOT TOKEN !!!)
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request){

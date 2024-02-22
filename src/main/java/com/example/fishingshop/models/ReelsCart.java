@@ -2,16 +2,14 @@ package com.example.fishingshop.models;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "reels_carts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ReelsCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

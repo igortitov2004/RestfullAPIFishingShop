@@ -28,7 +28,6 @@ import java.util.List;
 public class OrderController{
     private final OrderService orderService;
 
-
     @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/")
     public ResponseEntity<List<OrderResponse>> list(Principal principal){
@@ -41,13 +40,13 @@ public class OrderController{
     public ResponseEntity<String> create(@RequestBody OrderRequest orderRequest, Principal principal){
         User user = getCurrentUser(principal);
         Order order = orderService.add(orderRequest.getAddress(),user);
-        return ResponseEntity.ok("Заказ оформлен : дата и время " + order.getLocalDateTime());
+        return ResponseEntity.ok("Order is processed: date and time " + order.getLocalDateTime());
     }
     @PreAuthorize("hasAuthority('user:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         orderService.deleteById(id);
-        return ResponseEntity.ok("Удален заказ с id " + id);
+        return ResponseEntity.ok("Order with id " + id + " was deleted");
     }
     private User getCurrentUser(Principal principal){
         return (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();

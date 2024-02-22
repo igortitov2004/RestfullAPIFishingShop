@@ -41,29 +41,28 @@ public class ReelController {
     public ResponseEntity<List<ReelDTO>> list(@RequestParam(required = false) String name){
         return ResponseEntity.ok(reelService.list(name));
     }
-    @PreAuthorize("hasAnyAuthority('guest:read','user:read','admin:read')")
     @GetMapping("/{id}")
     public ResponseEntity<ReelDTO> reelInfo(@PathVariable Long id){
         ReelDTO reelDTO = reelService.getById(id);
         return ResponseEntity.ok(reelDTO);
     }
     @PreAuthorize("hasAuthority('admin:create')")
-    @PutMapping("/")
+    @PostMapping("/")
     public ResponseEntity<String> create(@RequestBody ReelCreationRequest request){
         reelService.add(request);
-        return ResponseEntity.ok("Создана катушка " + request.getName());
+        return ResponseEntity.ok("Reel " + request.getName() + " was created");
     }
     @PreAuthorize("hasAuthority('admin:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         reelService.delete(id);
-        return ResponseEntity.ok("Удалена катушка c id " + id);
+        return ResponseEntity.ok("Reel with id " + id + " was deleted");
     }
     @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody ReelEditRequest request){
         reelService.edit(request);
-        return ResponseEntity.ok("Обновлены данные катушки с id " + request.getId());
+        return ResponseEntity.ok("Data of reel with id " + request.getId() + " was updated");
     }
 
 }

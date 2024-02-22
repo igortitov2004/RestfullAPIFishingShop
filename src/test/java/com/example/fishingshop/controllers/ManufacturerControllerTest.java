@@ -1,14 +1,20 @@
 package com.example.fishingshop.controllers;
 
-import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodCreationRequest;
-import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
+import com.example.fishingshop.DTOs.manufacturer.ManufacturerCreationRequest;
+import com.example.fishingshop.DTOs.manufacturer.ManufacturerDTO;
+import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelCreationRequest;
+import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.enums.Role;
-import com.example.fishingshop.models.TypeOfRod;
-import com.example.fishingshop.repositories.TypeOfRodRepository;
+import com.example.fishingshop.models.Manufacturer;
+import com.example.fishingshop.models.TypeOfReel;
+import com.example.fishingshop.repositories.ManufacturerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.Before;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,18 +26,22 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+
 import java.util.List;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
-class TypeOfRodControllerTest {
+class ManufacturerControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private TypeOfRodRepository typeOfRodRepository;
+    private ManufacturerRepository manufacturerRepository;
 
     private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>(DockerImageName.parse("mysql:latest"));
 
@@ -45,7 +55,7 @@ class TypeOfRodControllerTest {
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(TypeOfRodController.class)
+                .standaloneSetup(TypeOfReelController.class)
                 .build();
     }
 
@@ -61,73 +71,73 @@ class TypeOfRodControllerTest {
 
     @AfterEach
     void deleteData() {
-        typeOfRodRepository.deleteAll();
+        manufacturerRepository.deleteAll();
     }
 
     @Test
     @SneakyThrows
     void list() {
-        TypeOfRod typeOfRod = typeOfRodRepository.save(TypeOfRod.builder()
-                .type("type")
+        Manufacturer manufacturer = manufacturerRepository.save(Manufacturer.builder()
+                .name("name")
                 .build());
-        TypeOfRodDTO typeOfRodDTO = TypeOfRodDTO.builder()
-                .id(typeOfRod.getId())
-                .type(typeOfRod.getType())
+        ManufacturerDTO manufacturerDTO = ManufacturerDTO.builder()
+                .id(manufacturer.getId())
+                .name(manufacturer.getName())
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/typesOfRods/")
+                        .get("/manufacturers/")
                         .accept("application/json")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(List.of(typeOfRodDTO))));
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(List.of(manufacturerDTO))));
     }
 
     @Test
     @SneakyThrows
     void update() {
-        TypeOfRod typeOfRod = typeOfRodRepository.save(TypeOfRod.builder()
-                .type("type")
+        Manufacturer manufacturer = manufacturerRepository.save(Manufacturer.builder()
+                .name("name")
                 .build());
-        TypeOfRodDTO typeOfRodDTO = TypeOfRodDTO.builder()
-                .id(typeOfRod.getId())
-                .type("typeEdit")
+        ManufacturerDTO manufacturerDTO = ManufacturerDTO.builder()
+                .id(manufacturer.getId())
+                .name("nameEdit")
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/typesOfRods/edit")
+                        .put("/manufacturers/edit")
                         .contentType("application/json")
-                        .content(new ObjectMapper().writeValueAsString(typeOfRodDTO))
+                        .content(new ObjectMapper().writeValueAsString(manufacturerDTO))
                         .with(user("testUser").authorities(Role.ADMIN.getAuthorities()))
                         .accept("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Type with id " + typeOfRodDTO.getId() + " was updated"));
+                .andExpect(content().string("Manufacturer with id " + manufacturerDTO.getId() + " was updated"));
     }
 
     @Test
     @SneakyThrows
     void create() {
-        TypeOfRodCreationRequest request = TypeOfRodCreationRequest.builder()
-                .type("type")
+        ManufacturerCreationRequest request = ManufacturerCreationRequest.builder()
+                .name("name")
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/typesOfRods/")
+                        .post("/manufacturers/")
                         .with(user("testUser").authorities(Role.ADMIN.getAuthorities()))
                         .contentType("application/json")
                         .content(new ObjectMapper().writeValueAsString(request))
                         .accept("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Type with name " + request.getType() + " was created"));
+                .andExpect(content().string("Manufacturer " + request.getName() + " was created"));
     }
 
     @Test
     @SneakyThrows
     void delete() {
-        TypeOfRod typeOfRod = typeOfRodRepository.save(TypeOfRod.builder()
-                .type("type")
+        Manufacturer manufacturer = manufacturerRepository.save(Manufacturer.builder()
+                .name("name")
                 .build());
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/typesOfRods/" + typeOfRod.getId())
+                        .delete("/manufacturers/" + manufacturer.getId())
                         .with(user("testUser").authorities(Role.ADMIN.getAuthorities())))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Type of rod with id " + typeOfRod.getId() + " was deleted"));
+                .andExpect(content().string("Manufacturer with id " + manufacturer.getId() + " was deleted"));
     }
 }

@@ -22,28 +22,27 @@ public class RodController{
     public ResponseEntity<List<RodDTO>> list(@RequestParam(required = false) String name){
         return ResponseEntity.ok(rodService.list(name));
     }
-    @PreAuthorize("hasAnyAuthority('guest:read','user:read','admin:read')")
     @GetMapping("/{id}")
     public ResponseEntity<RodDTO> rodInfo(@PathVariable Long id){
         RodDTO rodDTO = rodService.getById(id);
         return ResponseEntity.ok(rodDTO);
     }
     @PreAuthorize("hasAnyAuthority('admin:create')")
-    @PutMapping("/")
+    @PostMapping("/")
     public ResponseEntity<String> create(@RequestBody RodCreationRequest request){
         rodService.add(request);
-        return ResponseEntity.ok("Создано удилище" + request.getName());
+        return ResponseEntity.ok("Rod " + request.getName() + " was created");
     }
     @PreAuthorize("hasAnyAuthority('admin:delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         rodService.delete(id);
-        return ResponseEntity.ok("Удалено удилище c id " + id);
+        return ResponseEntity.ok("Rod with id " + id + " was deleted");
     }
     @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@RequestBody RodEditRequest request){
         rodService.edit(request);
-        return ResponseEntity.ok("Обновлены данные удилища с id " + request.getId());
+        return ResponseEntity.ok("Data of rod with id " + request.getId() + " was updated");
     }
 }
