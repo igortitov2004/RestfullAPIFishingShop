@@ -1,5 +1,8 @@
 package com.example.fishingshop.DTOs.rod;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +15,11 @@ import lombok.NoArgsConstructor;
 public class RodEditRequest {
     private Long id;
 
+    @Pattern(regexp = "^[a-zA-Z0-9\\s\\-]+$",message = "Incorrect name")
     private String name;
 
+    @Max(10000)
+    @Min(25)
     private Double price;
 
     private Long manufacturerId;

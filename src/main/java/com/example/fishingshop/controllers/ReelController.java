@@ -7,6 +7,7 @@ import com.example.fishingshop.services.ReelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,7 +49,7 @@ public class ReelController {
     }
     @PreAuthorize("hasAuthority('admin:create')")
     @PostMapping("/")
-    public ResponseEntity<String> create(@RequestBody ReelCreationRequest request){
+    public ResponseEntity<String> create(@Valid @RequestBody ReelCreationRequest request){
         reelService.add(request);
         return ResponseEntity.ok("Reel " + request.getName() + " was created");
     }
@@ -60,7 +61,7 @@ public class ReelController {
     }
     @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody ReelEditRequest request){
+    public ResponseEntity<String> update(@Valid @RequestBody ReelEditRequest request){
         reelService.edit(request);
         return ResponseEntity.ok("Data of reel with id " + request.getId() + " was updated");
     }

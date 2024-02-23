@@ -102,8 +102,8 @@ class CartControllerTest {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(user.getUsername());
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, Role.USER.getAuthorities()));
 
-        Reel reel = reelRepository.save(Reel.builder().name("reelName").price(1d).build());
-        Rod rod = rodRepository.save(Rod.builder().name("rodName").price(2d).build());
+        Reel reel = reelRepository.save(Reel.builder().name("reelName").price(30d).build());
+        Rod rod = rodRepository.save(Rod.builder().name("rodName").price(40d).build());
 
         reelsCartRepository.save(ReelsCart.builder().reel(reel).user(user).amount(2).build());
         rodsCartRepository.save(RodsCart.builder().rod(rod).user(user).amount(3).build());
@@ -115,12 +115,12 @@ class CartControllerTest {
         ReelDTO reelDTO = ReelDTO.builder()
                 .id(1L)
                 .name("reelName")
-                .price(1d)
+                .price(30d)
                 .build();
         RodDTO rodDTO = RodDTO.builder()
                 .id(1L)
                 .name("rodName")
-                .price(2d)
+                .price(40d)
                 .build();
         CartResponse cartResponse = CartResponse.builder()
                 .reelForCartResponseList(List.of(ReelForCartResponse.builder()
@@ -133,7 +133,7 @@ class CartControllerTest {
                         .rod(rodDTO)
                         .amount(3)
                         .build()))
-                .totalPrice(8d)
+                .totalPrice(180d)
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/carts")

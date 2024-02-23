@@ -6,6 +6,7 @@ import com.example.fishingshop.services.ManufacturerService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +25,7 @@ public class ManufacturerController {
     }
     @PreAuthorize("hasAuthority('admin:create')")
     @PostMapping("/")
-    public ResponseEntity<String> create(@RequestBody ManufacturerCreationRequest request){
+    public ResponseEntity<String> create(@Valid @RequestBody ManufacturerCreationRequest request){
         manufacturerService.add(request);
         return ResponseEntity.ok("Manufacturer " + request.getName() + " was created");
     }
@@ -36,7 +37,7 @@ public class ManufacturerController {
     }
     @PreAuthorize("hasAuthority('admin:update')")
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody ManufacturerDTO manufacturerDTO){
+    public ResponseEntity<String> update(@Valid @RequestBody ManufacturerDTO manufacturerDTO){
         manufacturerService.edit(manufacturerDTO);
         return ResponseEntity.ok("Manufacturer with id " + manufacturerDTO.getId() + " was updated");
     }

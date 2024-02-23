@@ -5,6 +5,7 @@ import com.example.fishingshop.DTOs.rod.RodDTO;
 import com.example.fishingshop.DTOs.rod.RodEditRequest;
 import com.example.fishingshop.services.RodService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +30,7 @@ public class RodController{
     }
     @PreAuthorize("hasAnyAuthority('admin:create')")
     @PostMapping("/")
-    public ResponseEntity<String> create(@RequestBody RodCreationRequest request){
+    public ResponseEntity<String> create(@Valid @RequestBody RodCreationRequest request){
         rodService.add(request);
         return ResponseEntity.ok("Rod " + request.getName() + " was created");
     }
@@ -41,7 +42,7 @@ public class RodController{
     }
     @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody RodEditRequest request){
+    public ResponseEntity<String> update(@Valid @RequestBody RodEditRequest request){
         rodService.edit(request);
         return ResponseEntity.ok("Data of rod with id " + request.getId() + " was updated");
     }

@@ -109,18 +109,18 @@ class RodControllerTest {
     void update() {
         Manufacturer manufacturer = manufacturerRepository.save(Manufacturer.builder().build());
         Rod rod = rodRepository.save(Rod.builder()
-                .testLoad(1)
-                .price(1d)
+                .testLoad(30)
+                .price(30d)
                 .type(typeOfRodRepository.save(TypeOfRod.builder().build()))
-                .length(1)
-                .weight(1)
+                .length(2)
+                .weight(300)
                 .manufacturer(manufacturer)
                 .name("rod")
                 .build());
         RodEditRequest request = RodEditRequest.builder()
                 .id(rod.getId())
                 .manufacturerId(manufacturer.getId())
-                .price(2d)
+                .price(40d)
                 .name("rodEdit")
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
@@ -139,11 +139,11 @@ class RodControllerTest {
         manufacturerRepository.save(Manufacturer.builder().build());
         typeOfRodRepository.save(TypeOfRod.builder().build());
         RodCreationRequest request = RodCreationRequest.builder()
-                .testLoad(1)
-                .price(1d)
+                .testLoad(30)
+                .price(30d)
                 .typeId(1L)
-                .length(1)
-                .weight(1)
+                .length(2)
+                .weight(300)
                 .manufacturerId(1L)
                 .name("rod")
                 .build();

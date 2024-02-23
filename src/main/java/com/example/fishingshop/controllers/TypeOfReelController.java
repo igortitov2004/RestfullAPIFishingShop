@@ -4,6 +4,7 @@ import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelCreationRequest;
 import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
 import com.example.fishingshop.services.TypeOfReelService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ public class TypeOfReelController {
     }
     @PreAuthorize("hasAnyAuthority('admin:create')")
     @PostMapping("/")
-    public ResponseEntity<String> create(@RequestBody TypeOfReelCreationRequest request){
+    public ResponseEntity<String> create(@Valid @RequestBody TypeOfReelCreationRequest request){
        typeOfReelService.add(request);
         return ResponseEntity.ok("Type with name " + request.getType() + " was created");
     }
@@ -35,7 +36,7 @@ public class TypeOfReelController {
     }
     @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody TypeOfReelDTO typeOfReelDTO){
+    public ResponseEntity<String> update(@Valid @RequestBody TypeOfReelDTO typeOfReelDTO){
         typeOfReelService.edit(typeOfReelDTO);
         return ResponseEntity.ok("Type with id " + typeOfReelDTO.getId() + " was updated");
     }

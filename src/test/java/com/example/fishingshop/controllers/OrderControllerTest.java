@@ -141,24 +141,24 @@ class OrderControllerTest {
     @Test
     @SneakyThrows
     void list() {
-        Reel reel = reelRepository.save(Reel.builder().name("reelName").price(1d).build());
-        Rod rod = rodRepository.save(Rod.builder().name("rodName").price(2d).build());
+        Reel reel = reelRepository.save(Reel.builder().name("reelName").price(30d).build());
+        Rod rod = rodRepository.save(Rod.builder().name("rodName").price(40d).build());
         Order order = orderRepository.save(Order.builder()
                 .address("address")
                 .user(user)
-                .totalPrice(8d)
+                .totalPrice(180d)
                 .build());
         reelsOrderRepository.save(ReelsOrder.builder().order(order).reel(reel).amount(2).build());
         rodsOrderRepository.save(RodsOrder.builder().order(order).rod(rod).amount(3).build());
         ReelDTO reelDTO = ReelDTO.builder()
                 .id(1L)
                 .name("reelName")
-                .price(1d)
+                .price(30d)
                 .build();
         RodDTO rodDTO = RodDTO.builder()
                 .id(1L)
                 .name("rodName")
-                .price(2d)
+                .price(40d)
                 .build();
         OrderResponse orderResponse = OrderResponse.builder()
                 .reelsForOrderResponseList(List.of(ReelsForOrderResponse.builder()
@@ -169,7 +169,7 @@ class OrderControllerTest {
                         .rod(rodDTO)
                         .amount(3)
                         .build()))
-                .totalPrice(8d)
+                .totalPrice(180d)
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/orders/")

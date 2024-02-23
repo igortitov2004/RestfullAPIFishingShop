@@ -4,6 +4,7 @@ import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodCreationRequest;
 import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
 import com.example.fishingshop.services.TypeOfRodService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ public class TypeOfRodController {
     }
     @PreAuthorize("hasAuthority('admin:create')")
     @PostMapping("/")
-    public ResponseEntity<String> create(@RequestBody TypeOfRodCreationRequest request){
+    public ResponseEntity<String> create(@Valid @RequestBody TypeOfRodCreationRequest request){
         typeOfRodService.add(request);
         return ResponseEntity.ok("Type with name " + request.getType() + " was created");
     }
@@ -35,7 +36,7 @@ public class TypeOfRodController {
     }
     @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody TypeOfRodDTO typeOfRodDTO){
+    public ResponseEntity<String> update(@Valid @RequestBody TypeOfRodDTO typeOfRodDTO){
         typeOfRodService.edit(typeOfRodDTO);
         return ResponseEntity.ok("Type with id " + typeOfRodDTO.getId() + " was updated");
     }

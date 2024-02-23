@@ -9,6 +9,7 @@ import com.example.fishingshop.services.ReelsOrderService;
 import com.example.fishingshop.services.RodsOrderService;
 import com.example.fishingshop.services.servicesImpl.OrderServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class OrderController{
     }
     @PreAuthorize("hasAuthority('user:create')")
     @PutMapping("/")
-    public ResponseEntity<String> create(@RequestBody OrderRequest orderRequest, Principal principal){
+    public ResponseEntity<String> create(@Valid @RequestBody OrderRequest orderRequest, Principal principal){
         User user = getCurrentUser(principal);
         Order order = orderService.add(orderRequest.getAddress(),user);
         return ResponseEntity.ok("Order is processed: date and time " + order.getLocalDateTime());

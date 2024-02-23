@@ -108,7 +108,7 @@ class ReelControllerTest {
     void update() {
         Manufacturer manufacturer = manufacturerRepository.save(Manufacturer.builder().build());
         Reel reel = reelRepository.save(Reel.builder()
-                .price(1d)
+                .price(30d)
                 .type(typeOfReelRepository.save(TypeOfReel.builder().build()))
                 .manufacturer(manufacturer)
                 .name("reel")
@@ -116,7 +116,7 @@ class ReelControllerTest {
         ReelEditRequest request = ReelEditRequest.builder()
                 .id(reel.getId())
                 .manufacturerId(manufacturer.getId())
-                .price(2d)
+                .price(40d)
                 .name("reelEdit")
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
@@ -135,7 +135,7 @@ class ReelControllerTest {
         manufacturerRepository.save(Manufacturer.builder().build());
         typeOfReelRepository.save(TypeOfReel.builder().build());
         ReelCreationRequest request = ReelCreationRequest.builder()
-                .price(1d)
+                .price(30d)
                 .typeId(1L)
                 .manufacturerId(1L)
                 .name("reel")
