@@ -1,5 +1,6 @@
 package com.example.fishingshop.DTOs.rod;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -16,11 +17,16 @@ public class RodEditRequest {
     private Long id;
 
     @Pattern(regexp = "^[a-zA-Z0-9\\s\\-]+$",message = "Incorrect name")
+    @Schema(defaultValue = "string")
     private String name;
 
-    @Max(10000)
-    @Min(25)
+    @Max(value = 10000,message = "Max price - 10000 BYN")
+    @Min(value = 0,message = "Min price - 0 BYN")
+    @Schema(defaultValue = "double")
     private Double price;
 
     private Long manufacturerId;
+
+    @Schema(defaultValue = "string")
+    private String link;
 }

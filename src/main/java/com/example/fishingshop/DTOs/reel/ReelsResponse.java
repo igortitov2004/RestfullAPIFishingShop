@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReelDTO {
+public class ReelsResponse {
     private Long id;
     private String name;
     private Double price;

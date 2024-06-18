@@ -4,10 +4,18 @@ package com.example.fishingshop.services.servicesImpl;
 import com.example.fishingshop.DTOs.reel.ReelCreationRequest;
 import com.example.fishingshop.DTOs.reel.ReelDTO;
 import com.example.fishingshop.DTOs.reel.ReelEditRequest;
+import com.example.fishingshop.DTOs.reel.ReelsResponse;
+import com.example.fishingshop.DTOs.rod.RodDTO;
+import com.example.fishingshop.DTOs.rod.RodsResponse;
 import com.example.fishingshop.exceptions.reelExceptions.ReelAlreadyExistsException;
 import com.example.fishingshop.exceptions.reelExceptions.ReelIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
+import com.example.fishingshop.models.ImageReelsLink;
+import com.example.fishingshop.models.ImageRodsLink;
 import com.example.fishingshop.models.Reel;
+import com.example.fishingshop.models.Rod;
+import com.example.fishingshop.repositories.ImageReelLinkRepository;
+import com.example.fishingshop.repositories.ImageRodsLinkRepository;
 import com.example.fishingshop.repositories.ReelRepository;
 import com.example.fishingshop.services.ManufacturerService;
 import com.example.fishingshop.services.ReelService;
@@ -16,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,6 +37,28 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
     private final ReelRepository reelRepository;
     private final ManufacturerService manufacturerService;
     private final TypeOfReelService typeOfReelService;
+
+    private final ImageReelLinkRepository imageReelLinkRepository;
+
+    @Override
+    public List<ReelsResponse> getList(String name) {
+        List<ReelsResponse> responseList = new ArrayList<>();
+        List<Reel> reels;
+        if(name!=null){
+            reels = reelRepository.findReelByNameContaining(name);
+        }else{
+            reels = reelRepository.findAll();
+        }
+        for (ReelDTO dto:reels.stream()
+                .map(this::mapToDTO)
+                .toList()) {
+            ReelsResponse response=modelMapper.map(dto,ReelsResponse.class);
+            response.setLink(imageReelLinkRepository.findImageReelsLinkByReelId(response.getId()).getLink());
+            responseList.add(response);
+        }
+        return responseList;
+    }
+
     @Override
     public List<ReelDTO> list(String name) {
         if(name!=null){
@@ -56,7 +87,12 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
                 .type(typeOfReelService.getById(request.getTypeId()))
                 .manufacturer(manufacturerService.getById(request.getManufacturerId()))
                 .build();
-        reelRepository.save(mapToEntity(reelDTO));
+        Reel reel = reelRepository.save(mapToEntity(reelDTO));
+        ImageReelsLink imageReelsLink = ImageReelsLink.builder()
+                .link(request.getLink())
+                .reel(reel)
+                .build();
+        imageReelLinkRepository.save(imageReelsLink);
     }
     @Override
     public void delete(Long id) {
@@ -84,6 +120,11 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
             dto.setManufacturer(manufacturerService.getById(request.getManufacturerId()));
         }
         reelRepository.save(mapToEntity(dto));
+        if(request.getLink() != null){
+            ImageReelsLink imageReelsLink = imageReelLinkRepository.findImageReelsLinkByReelId(request.getId());
+            imageReelsLink.setLink(request.getLink());
+            imageReelLinkRepository.save(imageReelsLink);
+        }
     }
     @Override
     public ReelDTO getById(Long id) {

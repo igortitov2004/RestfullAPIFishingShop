@@ -1,5 +1,6 @@
 package com.example.fishingshop.DTOs.orders;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,5 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderRequest {
     @Pattern(regexp = "^[a-zA-Z0-9\\s\\-,.]+$",message = "Incorrect address")
+    @Schema(defaultValue = "string")
     private String address;
 }

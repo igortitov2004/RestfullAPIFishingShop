@@ -3,6 +3,7 @@ package com.example.fishingshop.services;
 import com.example.fishingshop.DTOs.user.ChangePasswordRequest;
 import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.models.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.security.Principal;
 

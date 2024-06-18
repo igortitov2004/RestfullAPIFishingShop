@@ -33,8 +33,10 @@ public class Rod {
     @ManyToOne
     @JoinColumn(name="manufacturer")
     private Manufacturer manufacturer;
-    @OneToMany(mappedBy = "rod")
+    @OneToMany(mappedBy = "rod", cascade = CascadeType.ALL)
     private List<RodsCart> rodsCarts;
-    @OneToMany(mappedBy = "rod")
+    @OneToMany(mappedBy = "rod",cascade = CascadeType.ALL)
     private List<RodsOrder> rodsOrders;
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "rod")
+    private ImageRodsLink imageRodsLink;
 }

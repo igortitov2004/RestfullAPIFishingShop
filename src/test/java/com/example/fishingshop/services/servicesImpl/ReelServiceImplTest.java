@@ -10,9 +10,11 @@ import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerAlr
 import com.example.fishingshop.exceptions.manufacturerExceptions.ManufacturerIsNotExistException;
 import com.example.fishingshop.exceptions.reelExceptions.ReelAlreadyExistsException;
 import com.example.fishingshop.exceptions.reelExceptions.ReelIsNotExistsException;
+import com.example.fishingshop.models.ImageReelsLink;
 import com.example.fishingshop.models.Manufacturer;
 import com.example.fishingshop.models.Reel;
 import com.example.fishingshop.models.TypeOfReel;
+import com.example.fishingshop.repositories.ImageReelLinkRepository;
 import com.example.fishingshop.repositories.ReelRepository;
 import com.example.fishingshop.services.TypeOfReelService;
 import org.junit.jupiter.api.Test;
@@ -39,12 +41,14 @@ class ReelServiceImplTest {
     @Mock
     private ManufacturerServiceImpl manufacturerServiceImpl;
     @Mock
+    private ImageReelLinkRepository imageReelLinkRepository;
+    @Mock
     private ModelMapper modelMapper;
     @Test
     void list_whenTypeNotNull(){
         String name="name";
         List<Reel> reelList = new ArrayList<>();
-        reelList.add(new Reel(1L,"name",1d,null,null,null,null));
+        reelList.add(new Reel(1L,"name",1d,null,null,null,null,null));
         ReelDTO dto = new ReelDTO();
         dto.setId(1L);
         dto.setName("name");
@@ -63,7 +67,7 @@ class ReelServiceImplTest {
     @Test
     void list_whenTypeNull(){
         List<Reel> reelList = new ArrayList<>();
-        reelList.add(new Reel(1L,"name",1d,null,null,null,null));
+        reelList.add(new Reel(1L,"name",1d,null,null,null,null,null));
         ReelDTO dto = new ReelDTO();
         dto.setId(1L);
         dto.setName("name");
@@ -86,6 +90,7 @@ class ReelServiceImplTest {
         request.setPrice(1d);
         request.setTypeId(1L);
         request.setManufacturerId(1L);
+        request.setLink("link");
 
         Reel reel = new Reel();
         reel.setName(request.getName());
@@ -104,12 +109,13 @@ class ReelServiceImplTest {
                 request.getPrice(),
                 request.getTypeId(),
                 request.getManufacturerId())).thenReturn(false);
+
         Mockito.when(modelMapper.map(reelDTO,Reel.class)).thenReturn(reel);
         Mockito.when(typeOfReelServiceImpl.getById(request.getTypeId())).thenReturn(new TypeOfReelDTO());
         Mockito.when(manufacturerServiceImpl.getById(request.getManufacturerId())).thenReturn(new ManufacturerDTO());
 
         reelServiceImpl.add(request);
-
+        Mockito.verify(imageReelLinkRepository,Mockito.times(1)).save(any());
         Mockito.verify(reelRepository,Mockito.times(1)).save(reel);
     }
     @Test

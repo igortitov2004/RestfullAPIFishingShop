@@ -1,4 +1,4 @@
-package com.example.fishingshop.security.auth;
+package com.example.fishingshop.DTOs.reel.image;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-
-    private String username;
-    private String role;
-    private String token;
+public class ImageReelLinkDTO {
+    private String link;
+    private Long reelsId;
 }

@@ -14,6 +14,7 @@ import com.example.fishingshop.exceptions.reelExceptions.ReelIsNotExistsExceptio
 import com.example.fishingshop.exceptions.rodExceptions.RodAlreadyExistsException;
 import com.example.fishingshop.exceptions.rodExceptions.RodIsNotExistException;
 import com.example.fishingshop.models.*;
+import com.example.fishingshop.repositories.ImageRodsLinkRepository;
 import com.example.fishingshop.repositories.RodRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -40,6 +41,8 @@ class RodServiceImplTest {
     private TypeOfRodServiceImpl typeOfRodServiceImpl;
     @Mock
     private ManufacturerServiceImpl manufacturerServiceImpl;
+    @Mock
+    private ImageRodsLinkRepository imageRodsLinkRepository;
     @Mock
     private ModelMapper modelMapper;
     @Test
@@ -148,7 +151,7 @@ class RodServiceImplTest {
         Mockito.when(manufacturerServiceImpl.getById(request.getManufacturerId())).thenReturn(new ManufacturerDTO());
 
         rodServiceImpl.add(request);
-
+        Mockito.verify(imageRodsLinkRepository,Mockito.times(1)).save(any());
         Mockito.verify(rodRepository,Mockito.times(1)).save(rod);
     }
     @Test

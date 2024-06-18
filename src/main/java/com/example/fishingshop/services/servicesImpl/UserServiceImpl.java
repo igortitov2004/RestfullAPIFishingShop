@@ -11,6 +11,8 @@ import com.example.fishingshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,6 @@ import java.security.Principal;
 public class UserServiceImpl implements Map<UserDTO, User>, UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
@@ -52,6 +53,7 @@ public class UserServiceImpl implements Map<UserDTO, User>, UserService {
         }
         return userRepository.findById(id).map(this::mapToDTO).get();
     }
+
 
     @Override
     public void create(User user) {

@@ -4,6 +4,8 @@ import com.example.fishingshop.DTOs.orders.OrderDTO;
 import com.example.fishingshop.DTOs.orders.OrderRequest;
 import com.example.fishingshop.DTOs.orders.OrderResponse;
 import com.example.fishingshop.exceptions.orderExceptions.OrderIsNotExistsException;
+import com.example.fishingshop.exceptions.reelsCartExceptions.ReelsCartIsNotExistsException;
+import com.example.fishingshop.exceptions.rodsCartExceptions.RodsCartIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.Order;
 import com.example.fishingshop.models.User;
@@ -23,7 +25,6 @@ import java.util.List;
 public class OrderServiceImpl implements Map<OrderDTO,Order>,OrderService {
     private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
-
     private final ReelsOrderService reelsOrderService;
     private final RodsOrderService rodsOrderService;
     private final UserService userService;
@@ -35,11 +36,26 @@ public class OrderServiceImpl implements Map<OrderDTO,Order>,OrderService {
         order.setAddress(address);
         order.setUser(modelMapper.map(userService.getById(user.getId()), User.class));
         order=orderRepository.save(order);
-        Double totalReelsPrice = reelsOrderService.add(order);
-        Double totalRodsPrice = rodsOrderService.add(order);
-        order.setTotalPrice(totalReelsPrice+totalRodsPrice);
-        orderRepository.save(order);
-        return order;
+        Double totalReelsPrice;
+        Double totalRodsPrice;
+        try{
+            totalReelsPrice= reelsOrderService.add(order);
+        }catch (ReelsCartIsNotExistsException e){
+            totalReelsPrice=0d;
+        }
+        try {
+            totalRodsPrice= rodsOrderService.add(order);
+        }catch (RodsCartIsNotExistsException e){
+            totalRodsPrice=0d;
+        }
+        double totalPrice = totalRodsPrice+totalReelsPrice;
+        if(totalPrice!=0d){
+            order.setTotalPrice(totalReelsPrice+totalRodsPrice);
+            orderRepository.save(order);
+            return order;
+        }
+        return null;
+
     }
 
 
@@ -57,9 +73,12 @@ public class OrderServiceImpl implements Map<OrderDTO,Order>,OrderService {
         List<OrderResponse> orderResponseList = new ArrayList<>();
         for (OrderDTO orderDTO:orderDTOList){
             OrderResponse orderResponse = new OrderResponse();
+            orderResponse.setId(orderDTO.getId());
             orderResponse.setReelsForOrderResponseList(reelsOrderService.listByOrderId(orderDTO.getId()));
             orderResponse.setRodsForOrderResponseList(rodsOrderService.listByOrderId(orderDTO.getId()));
             orderResponse.setTotalPrice(orderDTO.getTotalPrice());
+            orderResponse.setLocalDateTime(orderDTO.getLocalDateTime());
+            orderResponse.setAddress(orderDTO.getAddress());
             orderResponseList.add(orderResponse);
         }
         return orderResponseList;

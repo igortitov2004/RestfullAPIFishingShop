@@ -12,6 +12,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "http://localhost:3000" })
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/users")
 @PreAuthorize("hasAnyRole('USER','ADMIN')")

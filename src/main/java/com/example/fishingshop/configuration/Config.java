@@ -1,6 +1,8 @@
 package com.example.fishingshop.configuration;
 
 import com.example.fishingshop.repositories.UserRepository;
+import com.example.fishingshop.services.UserService;
+import com.example.fishingshop.services.servicesImpl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +26,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
         scheme = "bearer")
 public class Config {
     private final UserRepository repository;
+
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> repository.findUserByEmail(username)
-                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+                        .orElseThrow(()->new UsernameNotFoundException("User not found"));
     }
     @Bean
     public AuthenticationProvider authenticationProvider(){

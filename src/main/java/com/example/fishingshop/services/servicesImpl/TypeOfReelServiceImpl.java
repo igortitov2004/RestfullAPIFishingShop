@@ -60,13 +60,13 @@ public class TypeOfReelServiceImpl implements Map<TypeOfReelDTO,TypeOfReel>, Typ
     @Override
     public void edit(TypeOfReelDTO dto) {
         if(!typeOfReelRepository.existsTypeOfReelById(dto.getId())){
-            throw new TypeOfReelIsNotExistsException("Type of rod with this id is not exist");
+            throw new TypeOfReelIsNotExistsException("Type of reel with this id is not exist");
         }
         Optional<TypeOfReel> typeOfReelOptional =
                 Optional.ofNullable(typeOfReelRepository.findTypeOfReelByType(dto.getType()));
         if(typeOfReelOptional.isPresent()
                 && !Objects.equals(typeOfReelOptional.get().getId(), dto.getId())){
-            throw new TypeOfReelAlreadyExistsException("Such a type of rod already exists");
+            throw new TypeOfReelAlreadyExistsException("Such a type of reel already exists");
         }
         typeOfReelRepository.save(mapToEntity(dto));
     }

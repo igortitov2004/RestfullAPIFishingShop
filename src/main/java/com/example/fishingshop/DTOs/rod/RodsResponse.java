@@ -1,7 +1,7 @@
-package com.example.fishingshop.DTOs.reel;
+package com.example.fishingshop.DTOs.rod;
 
 import com.example.fishingshop.DTOs.manufacturer.ManufacturerDTO;
-import com.example.fishingshop.DTOs.typeOfReel.TypeOfReelDTO;
+import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +11,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReelDTO {
+public class RodsResponse {
     private Long id;
     private String name;
+    private Integer length;
+    private Integer weight;
+    private Integer testLoad;
     private Double price;
-    private TypeOfReelDTO type;
+    private TypeOfRodDTO type;
     private ManufacturerDTO manufacturer;
     private String link;
 }

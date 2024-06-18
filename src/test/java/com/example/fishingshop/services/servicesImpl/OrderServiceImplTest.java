@@ -36,7 +36,7 @@ class OrderServiceImplTest {
     private UserServiceImpl userServiceImpl;
 
     @Test
-    void add(){
+    void add_whenTotalPriceNotEqualsNull(){
         String address="address";
         User user = User.builder()
                 .id(2L)
@@ -48,7 +48,7 @@ class OrderServiceImplTest {
                 .address(address)
                 .user(user)
                 .build();
-
+        Mockito.when(reelsOrderServiceImpl.add(order)).thenReturn(2d);
         Mockito.when(modelMapper.map(userDTO,User.class)).thenReturn(user);
         Mockito.when(userServiceImpl.getById(user.getId())).thenReturn(userDTO);
         Mockito.when(orderRepository.save(order)).thenReturn(order);
@@ -85,6 +85,7 @@ class OrderServiceImplTest {
 
         List<OrderResponse> expected = new ArrayList<>();
         expected.add(OrderResponse.builder()
+                        .id(1L)
                         .reelsForOrderResponseList(new ArrayList<>())
                         .rodsForOrderResponseList(new ArrayList<>())
                         .build());

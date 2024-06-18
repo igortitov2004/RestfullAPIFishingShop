@@ -33,6 +33,7 @@ public class ReelsOrderServiceImpl implements Map<ReelsOrderDTO, ReelsOrder>, Re
 
     public Double add(Order order) {
         double totalReelsPrice = 0d;
+
         for (ReelForCartResponse response : reelsCartService.listByUserId(order.getUser().getId())) {
             ReelsOrderDTO reelsOrderDTO = new ReelsOrderDTO();
             reelsOrderDTO.setReel(response.getReel());

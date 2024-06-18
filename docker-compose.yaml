@@ -1,0 +1,38 @@
+version: '3.5'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysqlcontainer
+    networks:
+      - networkmysql
+    ports:
+      - '3307:3306'
+    environment:
+      - MYSQL_DATABASE=fishing_shop
+      - MYSQL_ROOT_PASSWORD=matveibrat19
+  fishingshop:
+
+    image: fishingshopimage
+    container_name: fishingshopcontainer
+    ports:
+      - '7778:7777'
+    networks:
+      - networkmysql
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB_NAME=fishing_shop
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=matveibrat19
+networks:
+  networkmysql:
+    driver: bridge
+
+
+
+
+
+
+
+

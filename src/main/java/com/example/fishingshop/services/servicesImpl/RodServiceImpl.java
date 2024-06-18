@@ -4,13 +4,17 @@ import com.example.fishingshop.DTOs.reel.ReelDTO;
 import com.example.fishingshop.DTOs.rod.RodCreationRequest;
 import com.example.fishingshop.DTOs.rod.RodDTO;
 import com.example.fishingshop.DTOs.rod.RodEditRequest;
+import com.example.fishingshop.DTOs.rod.RodsResponse;
 import com.example.fishingshop.exceptions.reelExceptions.ReelAlreadyExistsException;
 import com.example.fishingshop.exceptions.reelExceptions.ReelIsNotExistsException;
 import com.example.fishingshop.exceptions.rodExceptions.RodAlreadyExistsException;
 import com.example.fishingshop.exceptions.rodExceptions.RodIsNotExistException;
 import com.example.fishingshop.interfaces.Map;
+import com.example.fishingshop.models.ImageReelsLink;
+import com.example.fishingshop.models.ImageRodsLink;
 import com.example.fishingshop.models.Reel;
 import com.example.fishingshop.models.Rod;
+import com.example.fishingshop.repositories.ImageRodsLinkRepository;
 import com.example.fishingshop.repositories.RodRepository;
 import com.example.fishingshop.services.ManufacturerService;
 import com.example.fishingshop.services.RodService;
@@ -20,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +36,27 @@ public class RodServiceImpl implements Map<RodDTO, Rod>, RodService {
     private final RodRepository rodRepository;
     private final ManufacturerService manufacturerService;
     private final TypeOfRodService typeOfRodService;
+    private final ImageRodsLinkRepository imageRodsLinkRepository;
+
+    @Override
+    public List<RodsResponse> getList(String name){
+        List<RodsResponse> responseList = new ArrayList<>();
+        List<Rod> rods;
+        if(name!=null){
+             rods = rodRepository.findRodByNameContaining(name);
+        }else{
+             rods = rodRepository.findAll();
+        }
+        for (RodDTO dto:rods.stream()
+                .map(this::mapToDTO)
+                .toList()) {
+            RodsResponse response=modelMapper.map(dto,RodsResponse.class);
+            response.setLink(imageRodsLinkRepository.findImageRodsLinkByRodId(response.getId()).getLink());
+            responseList.add(response);
+        }
+        return responseList;
+
+    }
     @Override
     public List<RodDTO> list(String name) {
         if(name!=null){
@@ -66,7 +92,12 @@ public class RodServiceImpl implements Map<RodDTO, Rod>, RodService {
                 .manufacturer(manufacturerService.getById(request.getManufacturerId()))
                 .type(typeOfRodService.getById(request.getTypeId()))
                 .build();
-        rodRepository.save(mapToEntity(rodDTO));
+        Rod rod=rodRepository.save(mapToEntity(rodDTO));
+        ImageRodsLink imageRodsLink = ImageRodsLink.builder()
+                .link(request.getLink())
+                .rod(rod)
+                .build();
+        imageRodsLinkRepository.save(imageRodsLink);
     }
     @Override
     public void delete(Long id) {
@@ -78,7 +109,7 @@ public class RodServiceImpl implements Map<RodDTO, Rod>, RodService {
     @Override
     public void edit(RodEditRequest request) {
         if(!rodRepository.existsRodById(request.getId())){
-            throw new RodIsNotExistException("Reel with this id is not exists");
+            throw new RodIsNotExistException("Rod with this id is not exists");
         }
         RodDTO dto = getById(request.getId());
         Optional<Rod> rodOptional = rodRepository.findRodByNameAndLengthAndWeightAndTestLoadAndPriceAndTypeIdAndManufacturerId(
@@ -97,6 +128,11 @@ public class RodServiceImpl implements Map<RodDTO, Rod>, RodService {
             dto.setManufacturer(manufacturerService.getById(request.getManufacturerId()));
         }
         rodRepository.save(mapToEntity(dto));
+        if(request.getLink() != null){
+            ImageRodsLink imageRodsLink = imageRodsLinkRepository.findImageRodsLinkByRodId(request.getId());
+            imageRodsLink.setLink(request.getLink());
+            imageRodsLinkRepository.save(imageRodsLink);
+        }
     }
     @Override
     public RodDTO getById(Long id) {

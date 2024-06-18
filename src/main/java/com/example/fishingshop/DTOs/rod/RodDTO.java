@@ -20,4 +20,5 @@ public class RodDTO {
     private Double price;
     private TypeOfRodDTO type;
     private ManufacturerDTO manufacturer;
+    private String link;
 }

@@ -3,6 +3,7 @@ package com.example.fishingshop.controllers;
 import com.example.fishingshop.DTOs.rod.RodCreationRequest;
 import com.example.fishingshop.DTOs.rod.RodDTO;
 import com.example.fishingshop.DTOs.rod.RodEditRequest;
+import com.example.fishingshop.DTOs.rod.RodsResponse;
 import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodCreationRequest;
 import com.example.fishingshop.DTOs.typeOfRod.TypeOfRodDTO;
 import com.example.fishingshop.enums.Role;
@@ -92,7 +93,7 @@ class RodControllerTest {
         Rod rod = rodRepository.save(Rod.builder()
                 .name("rod")
                 .build());
-        RodDTO rodDTO = RodDTO.builder()
+        RodsResponse rodsResponse = RodsResponse.builder()
                 .id(rod.getId())
                 .name(rod.getName())
                 .build();
@@ -101,7 +102,7 @@ class RodControllerTest {
                         .accept("application/json")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(List.of(rodDTO))));
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(List.of(rodsResponse))));
     }
 
     @Test

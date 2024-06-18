@@ -26,10 +26,6 @@ import static org.springframework.http.HttpMethod.*;
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfiguration {
-
-
-
-
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     @Bean
@@ -42,20 +38,20 @@ public class SecurityConfiguration {
                                 "/v3/**",
                                 "/swagger-ui/**",
                                 "/reels/",
-                                "/reels/{id}",
+//                                "/reels/edit", //Для фронта
+//                                "/reels/**",
                                 "/rods/",
-                                "/rods/{id}",
-                                "/manufacturers/",
-                                "/typeOfReels/",
-                                "/typesOfRods/")
+//                                "/rods/{id}",
+                                "/manufacturers/")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-//                        .hasAnyRole("USER","ADMIN"))
                 .sessionManagement((sess)->sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
 }

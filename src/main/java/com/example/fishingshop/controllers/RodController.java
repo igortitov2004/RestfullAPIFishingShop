@@ -3,6 +3,7 @@ package com.example.fishingshop.controllers;
 import com.example.fishingshop.DTOs.rod.RodCreationRequest;
 import com.example.fishingshop.DTOs.rod.RodDTO;
 import com.example.fishingshop.DTOs.rod.RodEditRequest;
+import com.example.fishingshop.DTOs.rod.RodsResponse;
 import com.example.fishingshop.services.RodService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -15,13 +16,15 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "http://localhost:3000" })
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/rods")
 public class RodController{
     private final RodService rodService;
+
     @GetMapping("/")
-    public ResponseEntity<List<RodDTO>> list(@RequestParam(required = false) String name){
-        return ResponseEntity.ok(rodService.list(name));
+    public ResponseEntity<List<RodsResponse>> list(@RequestParam(required = false) String name){
+        return ResponseEntity.ok(rodService.getList(name));
     }
     @GetMapping("/{id}")
     public ResponseEntity<RodDTO> rodInfo(@PathVariable Long id){

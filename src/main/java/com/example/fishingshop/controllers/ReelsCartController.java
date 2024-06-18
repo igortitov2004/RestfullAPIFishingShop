@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "http://localhost:3000" })
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasAnyRole('USER')")
 @RequestMapping("/reelsCarts")

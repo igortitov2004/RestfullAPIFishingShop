@@ -16,7 +16,7 @@ public class OrderDTO {
 
     private Long id;
     private UserDTO user;
-    private LocalDateTime localDateTime;
+    private String localDateTime;
     private String address;
     private Double totalPrice;
 }

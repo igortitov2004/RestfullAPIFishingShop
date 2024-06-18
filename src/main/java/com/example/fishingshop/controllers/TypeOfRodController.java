@@ -14,10 +14,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "http://localhost:3000" })
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/typesOfRods")
 public class TypeOfRodController {
     private final TypeOfRodService typeOfRodService;
+    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping("/")
     public ResponseEntity<List<TypeOfRodDTO>> list(@RequestParam(required = false) String type){
         return ResponseEntity.ok(typeOfRodService.list(type));

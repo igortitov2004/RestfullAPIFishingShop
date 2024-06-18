@@ -32,15 +32,12 @@ public class Reel {
     private Manufacturer manufacturer;
 
 
-    @OneToMany(mappedBy = "reel")
+    @OneToMany(mappedBy = "reel",cascade = CascadeType.ALL)
     private List<ReelsCart> reelsCarts;
 
-    @OneToMany(mappedBy = "reel")
+    @OneToMany(mappedBy = "reel",cascade = CascadeType.ALL)
     private List<ReelsOrder> reelsOrders;
 
-//    @OneToMany(mappedBy = "rod")
-//    private List<RodsCart> rodsCarts;
-//
-//    @OneToMany(mappedBy = "rod")
-//    private List<RodsOrder> rodsOrders;
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "reel")
+    private ImageReelsLink imageReelsLink;
 }
