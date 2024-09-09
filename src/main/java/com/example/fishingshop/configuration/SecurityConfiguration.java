@@ -24,7 +24,7 @@ import static org.springframework.http.HttpMethod.*;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -36,8 +36,11 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/auth/**",
                                 "/v3/**",
+//                                "/**",
                                 "/swagger-ui/**",
                                 "/reels/",
+                                 "/typeOfReels/",
+                                 "/typesOfRods/",
 //                                "/reels/edit", //Для фронта
 //                                "/reels/**",
                                 "/rods/",

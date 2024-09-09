@@ -17,26 +17,28 @@ import java.util.List;
 @CrossOrigin(origins = { "http://localhost:3000" })
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/typesOfRods")
+
 public class TypeOfRodController {
     private final TypeOfRodService typeOfRodService;
-    @PreAuthorize("hasAuthority('admin:read')")
+
+
     @GetMapping("/")
     public ResponseEntity<List<TypeOfRodDTO>> list(@RequestParam(required = false) String type){
         return ResponseEntity.ok(typeOfRodService.list(type));
     }
-    @PreAuthorize("hasAuthority('admin:create')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<String> create(@Valid @RequestBody TypeOfRodCreationRequest request){
         typeOfRodService.add(request);
         return ResponseEntity.ok("Type with name " + request.getType() + " was created");
     }
-    @PreAuthorize("hasAnyAuthority('admin:delete')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         typeOfRodService.delete(id);
         return ResponseEntity.ok("Type of rod with id " + id + " was deleted");
     }
-    @PreAuthorize("hasAnyAuthority('admin:update')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@Valid @RequestBody TypeOfRodDTO typeOfRodDTO){
         typeOfRodService.edit(typeOfRodDTO);

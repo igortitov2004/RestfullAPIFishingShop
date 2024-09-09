@@ -10,5 +10,5 @@ import java.security.Principal;
 public interface UserService {
     UserDTO getById(Long id);
     void create(User user);
-    void changePassword(ChangePasswordRequest request, Principal connectedUser);
+    void changePassword(ChangePasswordRequest request);
 }

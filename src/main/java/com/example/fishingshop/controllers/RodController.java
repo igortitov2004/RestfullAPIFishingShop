@@ -31,19 +31,19 @@ public class RodController{
         RodDTO rodDTO = rodService.getById(id);
         return ResponseEntity.ok(rodDTO);
     }
-    @PreAuthorize("hasAnyAuthority('admin:create')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<String> create(@Valid @RequestBody RodCreationRequest request){
         rodService.add(request);
         return ResponseEntity.ok("Rod " + request.getName() + " was created");
     }
-    @PreAuthorize("hasAnyAuthority('admin:delete')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         rodService.delete(id);
         return ResponseEntity.ok("Rod with id " + id + " was deleted");
     }
-    @PreAuthorize("hasAnyAuthority('admin:update')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@Valid @RequestBody RodEditRequest request){
         rodService.edit(request);

@@ -1,6 +1,7 @@
 package com.example.fishingshop.configuration;
 
 import com.example.fishingshop.repositories.UserRepository;
+import com.example.fishingshop.security.auth.UserVODetailsService;
 import com.example.fishingshop.services.UserService;
 import com.example.fishingshop.services.servicesImpl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -25,17 +26,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
         name = "bearerAuth",
         scheme = "bearer")
 public class Config {
-    private final UserRepository repository;
+    private final UserVODetailsService userVODetailsService;
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        return username -> repository.findUserByEmail(username)
-                        .orElseThrow(()->new UsernameNotFoundException("User not found"));
-    }
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setUserDetailsService(userVODetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }

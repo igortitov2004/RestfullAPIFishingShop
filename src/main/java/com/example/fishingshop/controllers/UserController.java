@@ -14,18 +14,17 @@ import java.security.Principal;
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "http://localhost:3000" })
 @SecurityRequirement(name = "bearerAuth")
+@PreAuthorize("hasAnyAuthority('USER','ADMIN')")
 @RequestMapping("/users")
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class UserController {
     private final UserService service;
 
-    @PreAuthorize("hasAnyAuthority('user:update','admin:update')")
+
     @PatchMapping
     public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request,
-            Principal connectedUser
+            @RequestBody ChangePasswordRequest request
     ) {
-        service.changePassword(request, connectedUser);
+        service.changePassword(request);
         return ResponseEntity.ok().build();
     }
 }

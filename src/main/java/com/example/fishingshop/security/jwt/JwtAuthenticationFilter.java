@@ -1,6 +1,7 @@
 package com.example.fishingshop.security.jwt;
 
 import com.example.fishingshop.repositories.UserRepository;
+import com.example.fishingshop.security.auth.UserVODetailsService;
 import com.example.fishingshop.services.UserService;
 import com.example.fishingshop.services.servicesImpl.UserServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -25,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
-    private final UserDetailsService userDetailsService;
+    private final UserVODetailsService userVODetailsService;
     private final UserRepository repository;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -42,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
        jwt = authHeader.substring(7);
        userEmail = jwtService.extractUsername(jwt);
        if(userEmail!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-           UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+           UserDetails userDetails = userVODetailsService.loadUserByUsername(userEmail);
            if(jwtService.isTokenValid(jwt,userDetails)){
                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                        userDetails,

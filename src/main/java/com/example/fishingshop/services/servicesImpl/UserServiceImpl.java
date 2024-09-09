@@ -7,10 +7,12 @@ import com.example.fishingshop.exceptions.userExceptions.UserIsNotExistsExceptio
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.User;
 import com.example.fishingshop.repositories.UserRepository;
+import com.example.fishingshop.security.auth.UserVODetails;
 import com.example.fishingshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,8 +27,8 @@ public class UserServiceImpl implements Map<UserDTO, User>, UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+    public void changePassword(ChangePasswordRequest request) {
+        var user = ((UserVODetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new IllegalStateException("Wrong password");
         }

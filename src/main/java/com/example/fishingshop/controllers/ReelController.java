@@ -78,7 +78,7 @@ public class ReelController {
                     )
             }
     )
-    @PreAuthorize("hasAuthority('admin:create')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<String> create(@Valid @RequestBody ReelCreationRequest request){
         reelService.add(request);
@@ -98,7 +98,7 @@ public class ReelController {
                     )
             }
     )
-    @PreAuthorize("hasAuthority('admin:delete')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         reelService.delete(id);
@@ -118,7 +118,7 @@ public class ReelController {
                     )
             }
     )
-    @PreAuthorize("hasAuthority('admin:update')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@Valid @RequestBody ReelEditRequest request){
         reelService.edit(request);
