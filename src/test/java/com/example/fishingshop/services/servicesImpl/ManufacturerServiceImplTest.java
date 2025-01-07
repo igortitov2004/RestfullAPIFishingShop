@@ -25,7 +25,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 @SpringBootTest
-class ManufacturerServiceImplTest {
+class  ManufacturerServiceImplTest {
     @InjectMocks
     private ManufacturerServiceImpl manufacturerServiceImpl;
     @Mock

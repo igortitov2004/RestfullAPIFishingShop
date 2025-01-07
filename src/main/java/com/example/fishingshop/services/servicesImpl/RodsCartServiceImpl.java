@@ -1,6 +1,6 @@
 package com.example.fishingshop.services.servicesImpl;
 
-import com.example.fishingshop.DTOs.carts.rodsCart.RodCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodCartEditAmountRequest;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodForCartResponse;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartDTO;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartCreationRequest;
@@ -33,7 +33,6 @@ public class RodsCartServiceImpl implements RodsCartService, Map<RodsCartDTO, Ro
         if (!rodsCartRepository.existsRodsCartByUserId(id)) {
             throw new RodsCartIsNotExistsException("Rods cart with this user id is not exists");
         }
-
         return rodsCartRepository.findByUserId(id).stream().map(this::mapToResponse).toList();
     }
 
@@ -86,10 +85,19 @@ public class RodsCartServiceImpl implements RodsCartService, Map<RodsCartDTO, Ro
     }
 
     @Override
-    public void increaseAmount(RodCartIncreaseAmountRequest request) {
+    public void increaseAmount(RodCartEditAmountRequest request) {
         RodsCartDTO dto = getById(request.getId());
         dto.setAmount(dto.getAmount() + 1);
         rodsCartRepository.save(mapToEntity(dto));
+    }
+
+    @Override
+    public void decreaseAmount(RodCartEditAmountRequest request) {
+        RodsCartDTO dto = getById(request.getId());
+        if(dto.getAmount()>1){
+            dto.setAmount(dto.getAmount() - 1);
+            rodsCartRepository.save(mapToEntity(dto));
+        }
     }
 
     @Override

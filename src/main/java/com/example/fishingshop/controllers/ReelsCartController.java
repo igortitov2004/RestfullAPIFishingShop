@@ -3,7 +3,7 @@ package com.example.fishingshop.controllers;
 
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelForCartResponse;
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartCreationRequest;
-import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartEditAmountRequest;
 import com.example.fishingshop.models.User;
 import com.example.fishingshop.security.auth.UserVODetails;
 import com.example.fishingshop.services.ReelsCartService;
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,8 +53,14 @@ public class ReelsCartController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<String> update(@RequestBody ReelsCartIncreaseAmountRequest request){
+    public ResponseEntity<String> increase(@RequestBody ReelsCartEditAmountRequest request){
         reelsCartService.increaseAmount(request);
+        return ResponseEntity.ok("Data of reel with id " + request.getId() + " was updated");
+    }
+
+    @PutMapping("/edit/dec")
+    public ResponseEntity<String> decrease(@RequestBody ReelsCartEditAmountRequest request){
+        reelsCartService.decreaseAmount(request);
         return ResponseEntity.ok("Data of reel with id " + request.getId() + " was updated");
     }
     private Long getCurrentUserId(Principal principal){

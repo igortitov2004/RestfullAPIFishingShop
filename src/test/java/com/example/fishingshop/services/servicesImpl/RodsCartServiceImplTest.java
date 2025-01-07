@@ -2,7 +2,7 @@ package com.example.fishingshop.services.servicesImpl;
 
 import com.example.fishingshop.DTOs.user.UserDTO;
 import com.example.fishingshop.DTOs.rod.RodDTO;
-import com.example.fishingshop.DTOs.carts.rodsCart.RodCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodCartEditAmountRequest;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodForCartResponse;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartCreationRequest;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartDTO;
@@ -145,7 +145,7 @@ class RodsCartServiceImplTest {
 
     @Test
     void increaseAmount_whenExists(){
-        RodCartIncreaseAmountRequest request = new RodCartIncreaseAmountRequest();
+        RodCartEditAmountRequest request = new RodCartEditAmountRequest();
         request.setId(100L);
 
         RodsCartDTO rodsCartDTO = new RodsCartDTO();
@@ -168,7 +168,7 @@ class RodsCartServiceImplTest {
     }
     @Test
     void increaseAmount_whenNotExists(){
-        RodCartIncreaseAmountRequest request = new RodCartIncreaseAmountRequest();
+        RodCartEditAmountRequest request = new RodCartEditAmountRequest();
         request.setId(100L);
 
         Mockito.when(rodsCartRepository.existsRodsCartById(request.getId())).thenReturn(false);

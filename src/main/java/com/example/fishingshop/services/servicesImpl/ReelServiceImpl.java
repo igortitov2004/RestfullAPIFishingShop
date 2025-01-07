@@ -23,6 +23,8 @@ import com.example.fishingshop.services.TypeOfReelService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,10 @@ public class ReelServiceImpl implements Map<ReelDTO, Reel>, ReelService {
                 .map(this::mapToDTO)
                 .toList()) {
             ReelsResponse response=modelMapper.map(dto,ReelsResponse.class);
-            response.setLink(imageReelLinkRepository.findImageReelsLinkByReelId(response.getId()).getLink());
+            ImageReelsLink imageReelsLink = imageReelLinkRepository.findImageReelsLinkByReelId(response.getId());
+            if(imageReelsLink!=null){
+                response.setLink(imageReelsLink.getLink());
+            }
             responseList.add(response);
         }
         return responseList;

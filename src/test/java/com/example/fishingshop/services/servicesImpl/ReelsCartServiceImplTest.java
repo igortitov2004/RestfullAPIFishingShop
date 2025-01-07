@@ -5,7 +5,7 @@ import com.example.fishingshop.DTOs.reel.ReelDTO;
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelForCartResponse;
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartCreationRequest;
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartDTO;
-import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartEditAmountRequest;
 import com.example.fishingshop.exceptions.reelsCartExceptions.ReelsCartIsNotExistsException;
 import com.example.fishingshop.models.Reel;
 import com.example.fishingshop.models.ReelsCart;
@@ -143,7 +143,7 @@ class ReelsCartServiceImplTest {
 
     @Test
     void increaseAmount_whenExists(){
-        ReelsCartIncreaseAmountRequest request = new ReelsCartIncreaseAmountRequest();
+        ReelsCartEditAmountRequest request = new ReelsCartEditAmountRequest();
         request.setId(100L);
 
         ReelsCartDTO reelsCartDTO = new ReelsCartDTO();
@@ -166,7 +166,7 @@ class ReelsCartServiceImplTest {
     }
     @Test
     void increaseAmount_whenNotExists(){
-        ReelsCartIncreaseAmountRequest request = new ReelsCartIncreaseAmountRequest();
+        ReelsCartEditAmountRequest request = new ReelsCartEditAmountRequest();
         request.setId(100L);
 
         Mockito.when(reelsCartRepository.existsReelsCartById(request.getId())).thenReturn(false);

@@ -6,6 +6,7 @@ import com.example.fishingshop.DTOs.reel.ReelEditRequest;
 import com.example.fishingshop.DTOs.reel.ReelsResponse;
 import com.example.fishingshop.services.ReelService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -78,27 +79,18 @@ public class ReelController {
                     )
             }
     )
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<String> create(@Valid @RequestBody ReelCreationRequest request){
         reelService.add(request);
         return ResponseEntity.ok("Reel " + request.getName() + " was created");
     }
     @Operation(
-            description = "Get endpoint for deleting reel",
+            description = "Get endpoint for deleting reel"
           //  summary = "List of reels",
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200"
-                    ),
-                    @ApiResponse(
-                            description = "Unauthorized / Invalid Token / No access",
-                            responseCode = "403"
-                    )
-            }
+
     )
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         reelService.delete(id);
@@ -111,14 +103,11 @@ public class ReelController {
                     @ApiResponse(
                             description = "Success",
                             responseCode = "200"
-                    ),
-                    @ApiResponse(
-                            description = "Unauthorized / Invalid Token / No access",
-                            responseCode = "403"
                     )
+
             }
     )
-    @PreAuthorize("hasAuthority('ADMIN')")
+   // @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@Valid @RequestBody ReelEditRequest request){
         reelService.edit(request);

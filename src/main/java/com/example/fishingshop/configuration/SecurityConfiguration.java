@@ -38,14 +38,14 @@ public class SecurityConfiguration {
                                 "/v3/**",
 //                                "/**",
                                 "/swagger-ui/**",
-                                "/reels/",
+                                "/reels/**",
                                  "/typeOfReels/",
                                  "/typesOfRods/",
 //                                "/reels/edit", //Для фронта
 //                                "/reels/**",
-                                "/rods/",
+                                "/rods/**",
 //                                "/rods/{id}",
-                                "/manufacturers/")
+                                "/manufacturers/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

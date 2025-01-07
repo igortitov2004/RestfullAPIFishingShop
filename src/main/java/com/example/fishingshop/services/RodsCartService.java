@@ -1,6 +1,6 @@
 package com.example.fishingshop.services;
 
-import com.example.fishingshop.DTOs.carts.rodsCart.RodCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.rodsCart.RodCartEditAmountRequest;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodForCartResponse;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartDTO;
 import com.example.fishingshop.DTOs.carts.rodsCart.RodsCartCreationRequest;
@@ -17,7 +17,8 @@ public interface RodsCartService {
 
     void add(RodsCartCreationRequest request, Long userId);
 
-    void increaseAmount(RodCartIncreaseAmountRequest request);
+    void increaseAmount(RodCartEditAmountRequest request);
+    void decreaseAmount(RodCartEditAmountRequest request);
     RodsCartDTO getById(Long id);
 
     Optional<RodsCart> rodsCartByUserIdAndRodId(Long userId, Long rodId);

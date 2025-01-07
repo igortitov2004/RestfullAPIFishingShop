@@ -3,7 +3,7 @@ package com.example.fishingshop.services.servicesImpl;
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelForCartResponse;
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartDTO;
 import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartCreationRequest;
-import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartIncreaseAmountRequest;
+import com.example.fishingshop.DTOs.carts.reelsCart.ReelsCartEditAmountRequest;
 import com.example.fishingshop.exceptions.reelsCartExceptions.ReelsCartIsNotExistsException;
 import com.example.fishingshop.interfaces.Map;
 import com.example.fishingshop.models.ReelsCart;
@@ -80,7 +80,7 @@ public class ReelsCartServiceImpl implements Map<ReelsCartDTO, ReelsCart>,ReelsC
         return reelsCartRepository.findReelsCartByUserIdAndReelId(userId,reelId);
     }
     @Override
-    public void increaseAmount(ReelsCartIncreaseAmountRequest request){
+    public void increaseAmount(ReelsCartEditAmountRequest request){
         if(!reelsCartRepository.existsReelsCartById(request.getId())){
             throw new ReelsCartIsNotExistsException("Reels cart with this user id is not exists");
         }
@@ -88,6 +88,16 @@ public class ReelsCartServiceImpl implements Map<ReelsCartDTO, ReelsCart>,ReelsC
         dto.setAmount(dto.getAmount()+1);
         reelsCartRepository.save(mapToEntity(dto));
     }
+
+    @Override
+    public void decreaseAmount(ReelsCartEditAmountRequest request) {
+        ReelsCartDTO dto = getById(request.getId());
+        if(dto.getAmount()>1){
+            dto.setAmount(dto.getAmount()-1);
+            reelsCartRepository.save(mapToEntity(dto));
+        }
+    }
+
     @Override
     public ReelsCartDTO getById(Long id) {
         if(!reelsCartRepository.existsReelsCartById(id)){

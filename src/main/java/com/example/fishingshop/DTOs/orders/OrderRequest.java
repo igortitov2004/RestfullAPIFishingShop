@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderRequest {
-    @Pattern(regexp = "^[a-zA-Z0-9\\s\\-,.]+$",message = "Incorrect address")
+    @Pattern(regexp = "^[Ёёa-zA-ZA-Яа-я0-9\\s\\-,.]+$",message = "Incorrect address")
     @Schema(defaultValue = "string")
     private String address;
 }

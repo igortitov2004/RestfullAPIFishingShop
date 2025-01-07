@@ -25,7 +25,7 @@ public class ManufacturerController {
     public ResponseEntity<List<ManufacturerDTO>> list(@RequestParam(required = false) String name){
         return ResponseEntity.ok(manufacturerService.list(name));
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<String> create(@Valid @RequestBody ManufacturerCreationRequest request){
         manufacturerService.add(request);
@@ -37,7 +37,7 @@ public class ManufacturerController {
         manufacturerService.delete(id);
         return ResponseEntity.ok("Manufacturer with id " + id + " was deleted");
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<String> update(@Valid @RequestBody ManufacturerDTO manufacturerDTO){
         manufacturerService.edit(manufacturerDTO);

@@ -23,6 +23,8 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +53,10 @@ public class RodServiceImpl implements Map<RodDTO, Rod>, RodService {
                 .map(this::mapToDTO)
                 .toList()) {
             RodsResponse response=modelMapper.map(dto,RodsResponse.class);
-            response.setLink(imageRodsLinkRepository.findImageRodsLinkByRodId(response.getId()).getLink());
+            ImageRodsLink imageRodsLink = imageRodsLinkRepository.findImageRodsLinkByRodId(response.getId());
+            if(imageRodsLink!=null) {
+                response.setLink(imageRodsLink.getLink());
+            }
             responseList.add(response);
         }
         return responseList;

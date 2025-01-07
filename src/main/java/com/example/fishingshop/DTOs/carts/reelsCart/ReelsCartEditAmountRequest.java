@@ -3,6 +3,6 @@ package com.example.fishingshop.DTOs.carts.reelsCart;
 import lombok.Data;
 
 @Data
-public class ReelsCartIncreaseAmountRequest {
+public class ReelsCartEditAmountRequest {
     private Long id;
 }
